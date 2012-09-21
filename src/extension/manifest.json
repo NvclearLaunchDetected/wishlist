@@ -1,0 +1,32 @@
+{
+	//"update_url":"",
+	"name": "wishlist",
+	"version": "0.1",
+	"manifest_version": 2,
+	"description": "wishlist",
+	
+	//"background_page": "",
+	//"options_page" : "",
+	"background": {
+		"page": "background.html"
+	},
+	"browser_action": {
+		"default_icon": "images/shopping-cart-full.ico",
+		"default_title": "wishlist"
+	},
+	"content_scripts": [
+	    {
+	      "matches": ["http://www.google.com/robots.txt*"],
+	      "js": ["oauth2/oauth2_inject.js"],
+	      "run_at": "document_start"
+	    }
+	],
+	"permissions": [
+		"tabs",
+		"background",
+		"https://accounts.google.com/o/oauth2/token",
+    	"https://www.googleapis.com/"
+	]
+
+	//,"default_locale" : "en"
+}
