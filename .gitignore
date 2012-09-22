@@ -1,0 +1,27 @@
+# ignore local node modules
+node_modules/
+
+
+# ignore logs
+logs/
+
+# ignore runtime.json
+runtime.json
+
+test/
+
+# ignore all object files
+*.o
+Makefile
+
+# ignore backup/temp files
+*.bak
+*.tmp
+*.temp
+
+
+# ignore all build folder
+build/
+
+# ignore all temp folder
+temp/
