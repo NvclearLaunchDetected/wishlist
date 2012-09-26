@@ -4,9 +4,6 @@
 	"version": "0.1",
 	"manifest_version": 2,
 	"description": "wishlist",
-	
-	//"background_page": "",
-	//"options_page" : "",
 	"background": {
 		"page": "background.html"
 	},
@@ -15,6 +12,7 @@
 		"default_title": "wishlist"
 	},
 	"content_scripts": [
+	    //content script for google oauth2
 	    {
 	      "matches": ["http://www.google.com/robots.txt*"],
 	      "js": ["oauth2/oauth2_inject.js"],
