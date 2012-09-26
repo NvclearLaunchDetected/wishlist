@@ -4,7 +4,9 @@ var google = new OAuth2('google', {
   api_scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
 });
 
+var url_parser = new URLParser();
 
+//browser action
 chrome.browserAction.onClicked.addListener(function(tab){
   if(!google.getAccessToken()){
     google.authorize(function(){
@@ -14,4 +16,16 @@ chrome.browserAction.onClicked.addListener(function(tab){
       });
     })
   }
+})
+
+//tabs handler
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
+  //현재 tab의 loading된 url이 변경 되면 패턴 조회
+  if(!url_parser.isProduct(changeInfo.url)) {
+    chrome.browserAction.setBadgeText({text:'', tabId: tabId});
+    return;
+  }
+
+  //선택된 tabId로 한정됨. 다른 tab은 자동으로 badge 변경
+  chrome.browserAction.setBadgeText({text:'+', tabId: tabId});
 })
