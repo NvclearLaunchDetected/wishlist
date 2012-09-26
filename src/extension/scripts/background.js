@@ -11,9 +11,6 @@ chrome.browserAction.onClicked.addListener(function(tab){
   if(!google.getAccessToken()){
     google.authorize(function(){
       //api 완성되면 여기서 등록 call 날려야지~~    
-      chrome.tabs.create({
-        url: 'dummy.html'
-      });
     })
   }
 })
