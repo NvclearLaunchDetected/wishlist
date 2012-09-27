@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -7,7 +6,8 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , wish = require('./routes/wish');
 
 var app = express();
 
@@ -27,16 +27,22 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
+//app.get('/', routes.index);
 
 /**
  * WishList
- */
- app.get('/wish/list', wish.list);
- app.post('/wish/item', wish.item);
- app.del('/wish/itme', wish.removeItem);
+*/ 
+app.get('/wish/items', wish.items);
+app.post('/wish/item', wish.item);
+app.del('/wish/item/:item_id', wish.removeItem);
+app.post('/wish/itemExist', wish.isExist);
+//app.get('/catalog/list', catalog.list);
 
- app.get('/catalog/list', catalog.list);
+/**
+* User
+*/
+app.post('/user/auth', user.authorization);
+app.get('/user/list/:email', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

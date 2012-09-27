@@ -1,31 +1,87 @@
-exports.list = function(req, res){
-  res.json({ 
-  	t: 99, // wishlist에 저장된 전체 건 수
-  	p: 0, // 현재 목록 페이지 인덱스 (0 ~ )
-  	d: [ // wish 목록
-  		{
-  			wid: 21390459435, // wish id (unique)
-  			s: 1, // site id (1:G마켓, 2:옥션, 3:11st, 4:인터파크, ... )
-  			u:'http://item.gmarket.co.kr/detailview.aspx?gdno=012345678', // 상품의 실제 VIP url
-  			t: '보솜이 물티슈 젤 잘 나가요 우헤헤', // 상품명
-  			p: 5500, // 상품 가격
-  			c: 237494, // 카탈로그 ID (About.co.kr)
-  			px: [ // 카탈로그 매칭이 된 상품의 경우, 상위 3개 최저가 상품의 간략 정보
-  				{
-  					s: 3, // site id
-  					u:'http://itempage3.auction.co.kr/detailview.aspx?itemno=A12345678', // 상품의 실제 VIP url
-  					p: 6230 // 상품 가격
-  				},
-  				{ s: 7,
-  					u:'http://itempage3.auction.co.kr/detailview.aspx?itemno=A12345678',
-  					p: 6230
-  				}
-  			]
-  		}
-  	]
+var mongoose = require('mongoose');
+var db = mongoose.createConnection('localhost', 'wish');
+
+var schema = mongoose.Schema({ 
+  market : Number,                                // 마켓정보 ()
+  title : String,                                 // 상품명
+  price : String,                                 // 가격
+  market_item_id : String,                        // 마켓별 상품 아이디
+  url : String,                                   // 상품 VIP url
+  user_id : mongoose.Schema.Types.ObjectId,        // 사용자 ID
+  regDate : { type: Date, default: Date.now }     // 생성일
+});
+
+var Item = db.model('Item', schema);
+
+exports.items = function(req, res){
+  //token 으로 user_id 조회
+
+  Item.find(function(err, items){
+        if(err){
+          console.log(err);
+          res.json(false);
+        }
+        else {
+          res.json(items);
+        }
   });
 };
 
 exports.item = function(req, res) {
-	res.json({});
+	var info = req.body;
+
+  // token 으로 user_id 조회
+
+  var item = new Item({
+    market : info.market,
+    title : info.title,
+    price : info.price,
+    market_item_id : info.market_item_id,
+    url : info.url,
+    user_id : mongoose.Types.ObjectId('5062e5f3e62b45a027000003')
+  });
+
+  item.save(function(err){
+    if(err){
+      console.log(err);
+      res.json(false);
+    }
+    else{
+      res.json(true);
+    }
+  });
+}
+
+exports.removeItem = function(req, res) {
+  var item_id = mongoose.Types.ObjectId(req.params.item_id);
+  Item.remove({_id:item_id}, function(err){
+    if(err){
+      console.log(err);
+      res.json(false);
+    }
+    else{
+      res.json(true);
+    }
+  });
+}
+
+exports.isExist = function(req, res){
+  var market = req.body.market;
+  var market_item_id = req.body.market_item_id;
+
+  Item.findOne({market : market, market_item_id : market_item_id},
+    function(err, item){
+      if(err){
+        console.log(err);
+        res.json(null);
+      }
+      else{
+        if(item == null){
+          res.json(false);
+        }
+        else{
+          res.json(true);
+        }
+      }
+    });
 }
