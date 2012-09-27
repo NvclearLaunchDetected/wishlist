@@ -8,7 +8,7 @@ var schema = mongoose.Schema({
   market_item_id : String,                        // 마켓별 상품 아이디
   url : String,                                   // 상품 VIP url
   user_id : mongoose.Schema.Types.ObjectId,        // 사용자 ID
-  regDate : { type: Date, default: Date.now }     // 생성일
+  reg_date : { type: Date, default: Date.now }     // 생성일
 });
 
 var Item = db.model('Item', schema);

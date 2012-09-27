@@ -6,7 +6,7 @@ var schema = mongoose.Schema({
 	email : String,    							    // 이메일
 	siteName : { type: String, default: "google" }, // 인증 사이트(default : google)
 	token : String,    							    // 인증 토큰
-	regDate : { type: Date, default: Date.now }     // 생성일
+	reg_date : { type: Date, default: Date.now }     // 생성일
 });
 
 var User = db.model('User', schema);
