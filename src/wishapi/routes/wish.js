@@ -13,21 +13,37 @@ var schema = mongoose.Schema({
 
 var Item = db.model('Item', schema);
 
-exports.items = function(req, res){
+exports.getWishList = function(req, res){
   //token 으로 user_id 조회
 
-  Item.find(function(err, items){
-        if(err){
-          console.log(err);
-          res.json(false);
-        }
-        else {
-          res.json(items);
-        }
+  var market = req.query.market;
+  var market_item_id = req.query.market_item_id;
+
+  // 조회 조건
+  var query = {};
+
+  if (market != undefined)
+  {
+    query.market = market;
+  }
+  if( market_item_id != undefined)
+  {
+    query.market_item_id = market_item_id;
+  }
+
+  Item.find(query,
+    function(err, items){
+      if(err){
+        console.log(err);
+        res.json(false);
+      }
+      else {
+        res.json(items);
+      }
   });
 };
 
-exports.item = function(req, res) {
+exports.addItem = function(req, res) {
 	var info = req.body;
 
   // token 으로 user_id 조회
@@ -63,25 +79,4 @@ exports.removeItem = function(req, res) {
       res.json(true);
     }
   });
-}
-
-exports.isExist = function(req, res){
-  var market = req.body.market;
-  var market_item_id = req.body.market_item_id;
-
-  Item.findOne({market : market, market_item_id : market_item_id},
-    function(err, item){
-      if(err){
-        console.log(err);
-        res.json(null);
-      }
-      else{
-        if(item == null){
-          res.json(false);
-        }
-        else{
-          res.json(true);
-        }
-      }
-    });
 }

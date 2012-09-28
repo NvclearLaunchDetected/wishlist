@@ -32,10 +32,9 @@ app.configure('development', function(){
 /**
  * WishList
 */ 
-app.get('/wish/items', wish.items);
-app.post('/wish/item', wish.item);
-app.del('/wish/item/:item_id', wish.removeItem);
-app.post('/wish/itemExist', wish.isExist);
+app.get('/wishlist', wish.getWishList);
+app.post('/wishlist', wish.addItem);
+app.del('/wishlist/:item_id', wish.removeItem);
 //app.get('/catalog/list', catalog.list);
 
 /**
