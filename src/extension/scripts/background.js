@@ -17,13 +17,15 @@ chrome.browserAction.onClicked.addListener(function(tab){
       //api 완성되면 여기서 등록 call 날려야지~~    
     })
   }*/
-  
+  chrome.tabs.executeScript(null, {
+    code: 'inject()'
+  });
 })
 
 //tabs handler
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   //현재 tab의 loading된 url이 변경 되면 패턴 조회
-  if(!url_parser.isProduct(changeInfo.url)) {
+  if(!url_parser.isProduct(tab.url)) {
     chrome.browserAction.setBadgeText({text:'', tabId: tabId});
     chrome.browserAction.setPopup({
       tabId: tab.tabId,
