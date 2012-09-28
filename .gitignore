@@ -25,3 +25,6 @@ build/
 
 # ignore all temp folder
 temp/
+
+# ignore cloudfoundry vmc configfile
+manifest.yml
