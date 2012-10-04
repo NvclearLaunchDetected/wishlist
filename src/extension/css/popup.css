@@ -1,47 +1,55 @@
-table.popup {
-	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 100%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: transparent; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 518px; position: absolute; z-index: 999999999; right: 25px; top: 10px; display: block;
+table.wishlist_popup {
+	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 100%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top;  table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 518px; position: absolute; z-index: 999999999; right: 25px; top: 10px; display: block;
 }
 
-table.popup tbody {
-	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: transparent; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto;
+table.wishlist_popup tbody {
+	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto;
 }
 
-table.popup tbody tr.draggable {
-	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: transparent; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; cursor: move;
+table.wishlist_popup tbody tr.draggable {
+	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top;  table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; cursor: move;
 }
 
-table.popup tbody tr td.top_left {
+table.wishlist_popup tbody tr td.content {
+	background-color: rgb(255,255,255); padding-left: 10px; padding-right: 10px;
+}
+
+table.wishlist_popup tbody tr td.top_left {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 34px; height: 20px; background-image: url(http://imageshack.us/a/img145/9048/popuptopleft.png); background-position: 0% 0%; background-repeat: no-repeat no-repeat;
 }
 
-table.popup tbody tr td.top {
+table.wishlist_popup tbody tr td.top {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: center; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; background-image: url(http://imageshack.us/a/img442/1673/popuptop.png); background-position: 50% 0%; background-repeat: repeat no-repeat;
 }
 
-table.popup tbody tr td.top_right {
+table.wishlist_popup tbody tr td.top_right {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 34px; height: 20px; background-image: url(http://imageshack.us/a/img253/3089/popuptopright.png); background-position: 100% 0%; background-repeat: no-repeat no-repeat;
 }
 
-table.popup tbody tr td.left {
+table.wishlist_popup tbody tr td.left {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; background-image: url(http://imageshack.us/a/img856/9629/popupleft.png); background-position: 0% 50%; background-repeat: no-repeat repeat;
 }
 
-table.popup tbody tr td.right {
+table.wishlist_popup tbody tr td.right {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; background-image: url(http://imageshack.us/a/img39/9927/popupright.png); background-position: 100% 50%; background-repeat: no-repeat repeat;
 }
 
-table.popup tbody tr td.bottom_left {
+table.wishlist_popup tbody tr td.bottom_left {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 34px; height: 20px; background-image: url(http://imageshack.us/a/img15/2418/popupbottomleft.png); background-position: 0% 100%; background-repeat: no-repeat no-repeat;
 }
 
-table.popup tbody tr td.bottom {
+table.wishlist_popup tbody tr td.bottom {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: center; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 480px; background-image: url(http://imageshack.us/a/img710/1207/popupbottom.png); background-position: 50% 100%; background-repeat: repeat no-repeat;
 }
 
-table.popup tbody tr td.bottom_right {
+table.wishlist_popup tbody tr td.bottom_right {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 34px; height: 20px; background-image: url(http://imageshack.us/a/img195/5161/popupbottomright.png); background-position: 100% 100%; background-repeat: no-repeat no-repeat;
 }
 
+table.form_table tbody tr td {
+	padding-top: 10px; padding-bottom: 10px
+}
+
 a.close {
-	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px 7px 0px 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: transparent; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; position: absolute; right: 5px; top: 2px;
+	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px 7px 0px 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top;  table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; position: absolute; right: 5px; top: 2px;
 }

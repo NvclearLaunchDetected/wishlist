@@ -5,4 +5,75 @@
 		<script src="scripts/urlparser.js"></script>
 		<script src="scripts/background.js"></script>
 	</head>
+	<body>
+		<table class="wishlist_popup" width="518px" border="0" id="wishlist_popup" cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr class="draggable">
+					<td class="top_left"></td>
+					<td class="top">
+						<div style="font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: transparent; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; display: block; position: relative; height: 20px;"></div>
+					</td>
+					<td class="top_right"></td>
+				</tr>
+				<tr class="draggable">
+					<td class="left"></td>
+					<td>
+						<div style="font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: white; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 479px; display: block; position: relative; height: 43px; background-image: url(https://images-na.ssl-images-amazon.com/images/G/01/x-locale/communities/gifting/universal/bkm/Amazon_Wish_List_longlogo-new._V149468553_.png); background-position: 50% 0%; background-repeat: no-repeat no-repeat;">
+							<a class="close" href="#" width="17px" target="_self">
+								<img class="close" border="0" src="http://imageshack.us/a/img138/9210/closec.png" alt="Close">
+							</a>
+						</div>
+					</td>
+					<td class="right"></td>
+				</tr>
+				<tr>
+					<td class="left"></td>
+					<td class="content">
+						<form id="wishlist_popup_form">
+						<table class='form_table'>
+							<tbody>
+								<tr>
+									<td style="width: 160px" align="center">
+										
+									</td>
+									<td>
+										<input type='text' id="wishlist_popup_title" value="title">
+									</td>
+								</tr>
+								<tr>
+									<td style="width: auto" align="center">
+									</td>
+									<td>
+										<input type='text' id="wishlist_popup_price" value="price">
+									</td>
+								</tr>
+								<tr>
+									<td style="width: auto" align="center">
+									</td>
+									<td>
+										<textarea id="wishlist_popup_comment" rows='2' cols='44' value='Comments'>
+										</textarea>
+									</td>
+								</tr>
+								<tr>
+									<td style="width: auto" align="center">
+									</td>
+									<td>
+										<button id="wishlist_popup_addtowishlist" value="Add to wishlist">Add to wishlist</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						</form>
+					</td>
+					<td class="right"></td>
+				</tr>
+				<tr>
+					<td class="bottom_left"></td>
+					<td class="bottom"></td>
+					<td class="bottom_right"></td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
 </html>
