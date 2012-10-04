@@ -1,72 +1,60 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    schema = require('./schema'),
+    err_code = require('./err_code');
+
 var db = mongoose.createConnection('localhost', 'wish');
 
-var schema = mongoose.Schema({ 
-	name : String,     							    // 사용자명
-	email : String,    							    // 이메일
-	siteName : { type: String, default: "google" }, // 인증 사이트(default : google)
-	token : String,    							    // 인증 토큰
-	reg_date : { type: Date, default: Date.now }     // 생성일
-});
-
-var User = db.model('User', schema);
+var User = db.model('User', schema.user);
 
 exports.authorization = function(req, res){
 	var info = req.body;
 	
-	User.findOne({ email: info.email },
-		function(err, user){
-			if(err){
-				console.log(err);
-			}
-			else {
-				if (user){
-					user.name = info.name;
-					user.siteName = info.siteName;
-					user.token = info.token;
-					user.regDate = Date.now();
-					user.save(function(err){
-						if(err){
-							console.log(err);
-							res.json(false);
-						}
-						else {
-							console.log("2");
-							res.json(true);
-						}
-					});
-				}else{
-					var newUser = new User({
-						name : info.name,
-						email : info.email,
-						siteName : info.siteName,
-						token : info.token,
-						regDate : Date.now()
-					});
-
-					newUser.save(function(err){
-						if(err){
-							console.log(err);
-							res.json(false);
-						}
-						else{
-							res.json(true);
-						}
-					});
+	var userFindCallback = function(err, user){
+		if(err){
+			console.log(err);
+			res.json({
+				err : {
+					code : err_code.CAN_NOT_FIND_USER,
+					msg : err.message
 				}
+			});
+		}
+		else {
+			if (user){
+				user.name = info.name;
+				user.siteName = info.siteName;
+				user.token = info.token;
+				user.regDate = Date.now();
+			}else{
+				user  = new User({
+					name : info.name,
+					email : info.email,
+					siteName : info.siteName,
+					token : info.token,
+					regDate : Date.now()
+				});
 			}
-	});
-};
 
-exports.list = function(req, res){
-	User.find({ email: req.params.email },
-			function(err, users){
+			var userSaveCallback = function(err){
 				if(err){
 					console.log(err);
-					res.json(false);
+					res.json({
+						err : {
+							code : err_code.CAN_NOT_SAVE_USER,
+							msg : err.message
+						}
+					});
 				}
-				else {
-					res.json(users);
+				else{
+					res.json({
+						data : true								
+					});
 				}
-	});
+			};
+
+			user.save(userSaveCallback);
+		}
+	};
+
+	User.findOne({ email: info.email }, userFindCallback);
 };

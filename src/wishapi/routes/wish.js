@@ -1,82 +1,183 @@
-var mongoose = require('mongoose');
-var db = mongoose.createConnection('localhost', 'wish');
+var querystring = require('querystring'),
+    mongoose = require('mongoose'),
+    schema = require('./schema'),
+    db = mongoose.createConnection('localhost', 'wish'),
+    err_code = require('./err_code');
 
-var schema = mongoose.Schema({ 
-  market : Number,                                // 마켓정보 ()
-  title : String,                                 // 상품명
-  price : String,                                 // 가격
-  market_item_id : String,                        // 마켓별 상품 아이디
-  url : String,                                   // 상품 VIP url
-  user_id : mongoose.Schema.Types.ObjectId,        // 사용자 ID
-  reg_date : { type: Date, default: Date.now }     // 생성일
-});
 
-var Item = db.model('Item', schema);
+var Item = db.model('Item', schema.item),
+    User = db.model('User', schema.user);
 
 exports.getWishList = function(req, res){
   //token 으로 user_id 조회
-
-  var market = req.query.market;
-  var market_item_id = req.query.market_item_id;
-
-  // 조회 조건
-  var query = {};
-
-  if (market != undefined)
-  {
-    query.market = market;
-  }
-  if( market_item_id != undefined)
-  {
-    query.market_item_id = market_item_id;
+  var authInfo = querystring.parse(req.get('GX-AUTH'));
+  if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
+    res.json({
+      err : {
+        code : err_code.CAN_NOT_GET_AUTH_INFO,
+        msg : '사용자 인증 정보가 누락 되었습니다.'
+      }
+    });
+    return;
   }
 
-  Item.find(query,
-    function(err, items){
-      if(err){
-        console.log(err);
-        res.json(false);
+  var userFindCallback = function(err, user){
+    if (err){
+      console.log(err);
+      res.json({
+        err : {
+          code : err_code.CAN_NOT_FIND_USER,
+          msg : err.message
+        }
+      });
+    }
+    else {
+      var market = req.query.market;
+      var market_item_id = req.query.market_item_id;
+
+      // 조회 조건
+      var query = {};
+
+      if (market != undefined)
+      {
+        query.market = market;
       }
-      else {
-        res.json(items);
+      if( market_item_id != undefined)
+      {
+        query.market_item_id = market_item_id;
       }
-  });
+
+      query.user_id = user._id;
+
+      var itemFindCallback = function(err, items){
+        if(err){
+            console.log(err);
+            res.json({
+              err : {
+                code : err_code.CAN_NOT_FIND_ITEM,
+                msg : err.message
+              }
+            });
+          }
+          else {
+            res.json({
+              data : items
+            });
+          }
+      };
+
+      Item.find(query, itemFindCallback);
+    }
+  };
+
+  User.findOne({email:authInfo.ga, token:authInfo.token}, userFindCallback);
 };
 
 exports.addItem = function(req, res) {
-	var info = req.body;
+  //token 으로 user_id 조회
+  var authInfo = querystring.parse(req.get('GX-AUTH'));
+  if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
+    res.json({
+      err : {
+        code : err_code.CAN_NOT_GET_AUTH_INFO,
+        msg : '사용자 인증 정보가 누락 되었습니다.'
+      }
+    });
+    return;
+  }
 
-  // token 으로 user_id 조회
-
-  var item = new Item({
-    market : info.market,
-    title : info.title,
-    price : info.price,
-    market_item_id : info.market_item_id,
-    url : info.url,
-    user_id : mongoose.Types.ObjectId('5062e5f3e62b45a027000003')
-  });
-
-  item.save(function(err){
-    if(err){
+  var userFindCallback = function(err, user){
+    if (err){
       console.log(err);
-      res.json(false);
+      res.json({
+        err : {
+          code : err_code.CAN_NOT_FIND_USER,
+          msg : err.message
+        }
+      });
     }
-    else{
-      res.json(true);
+    else {
+      var info = req.body;
+
+      var item = new Item({
+        market : info.market,
+        title : info.title,
+        price : info.price,
+        market_item_id : info.market_item_id,
+        url : info.url,
+        user_id : mongoose.Types.ObjectId(user._id)
+      });
+
+      var itemCallback = function(err){
+        if(err){
+          console.log(err);
+          res.json({
+            err : {
+              code : err_code.CAN_NOT_SAVE_ITEM,
+              msg : err.message
+            }
+          });
+        }
+        else{
+          res.json({
+            data : true
+          });
+        }
+      };
+
+      item.save(itemCallback);
     }
-  });
-}
+  }
+
+  User.findOne({email:authInfo.ga, token:authInfo.token}, userFindCallback);
+};
 
 exports.removeItem = function(req, res) {
-  var item_id = mongoose.Types.ObjectId(req.params.item_id);
-  Item.remove({_id:item_id}, function(err){
-    if(err){
+  //token 으로 user_id 조회
+  var authInfo = querystring.parse(req.get('GX-AUTH'));
+  if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
+    res.json({
+      err : {
+        code : err_code.CAN_NOT_GET_AUTH_INFO,
+        msg : '사용자 인증 정보가 누락 되었습니다.'
+      }
+    });
+    return;
+  }
+
+  var userFindCallback = function(err, user){
+    if (err){
       console.log(err);
-      res.json(false);
+      res.json({
+        err : {
+          code : err_code.CAN_NOT_FIND_USER,
+          msg : err.message
+        }
+      });
     }
-    else{
-      res.json(true);
+    else {
+      var item_id = mongoose.Types.ObjectId(req.params.item_id);
+
+      var itemRemoveCallback = function(err){
+        if(err){
+          console.log(err);
+          res.json({
+            err : {
+              code : err_code.CAN_NOT_REMOVE_ITEM,
+              msg : err.message
+            }
+          });
+        }
+        else{
+          res.json({
+            data : true
+          });
+        }
+      };
+
+      Item.remove({_id:item_id, user_id:user._id}, itemRemoveCallback);
     }
-  });
-}
+  }
+
+  User.findOne({email:authInfo.ga, token:authInfo.token}, userFindCallback);
+};
