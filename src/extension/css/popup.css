@@ -53,3 +53,7 @@ table.form_table tbody tr td {
 a.close {
 	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px 7px 0px 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top;  table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto; position: absolute; right: 5px; top: 2px;
 }
+
+img.wishlist_imagelist {
+	font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: auto; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border: 1px solid rgb(221, 221, 221); border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: transparent; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: auto;
+}

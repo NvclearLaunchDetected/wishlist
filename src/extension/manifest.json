@@ -24,8 +24,10 @@
 	    		"*://*.gmarket.co.kr/*"
 	    	],
 	    	"js": [
-	    		"libs/jquery.1.8.1.min.js",
-	    		"scripts/injectpopup.js"
+	    		"libs/jquery.1.8.1.min.js"
+	    		,"scripts/pagescraper.js"
+	    		,"scripts/injectpopup.js"
+	    		
 	    	],
 	    	"css": [
 	    		"css/popup.css"

@@ -18,6 +18,12 @@ function inject(){
 				alreadyInjected = false;				
 			},0)
 		})
+
+		//scrapping data
+		var scraper = new PageScraper();
+		$('#wishlist_popup_title').val(scraper.getTitle());
+		$('#wishlist_popup_price').val(scraper.getPrice());
+		
 	});
 }
 
