@@ -48,8 +48,31 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
    });
 })
 
-chrome.extension.onMessage.addListener(function(msg, sender, cb){
-  if('getPopupHtml' == msg){
+chrome.extension.onMessage.addListener(function(info, sender, cb){
+  if('getPopupHtml' == info.msg){
     cb({html: $('#wishlist_popup').html()});
+  }
+
+  if('addToWishlist' == info.msg){
+    var data = {
+      market: 'gmarket',
+      title: info.arg.wishlist_popup_title,
+      price: info.arg.wishlist_popup_price,
+      comments: info.arg.wishlist_popup_comments,
+      imageurl: info.arg.wishlist_popup_imagelist_selected,
+      url: 'test'
+    };
+
+    // $.ajax({
+    //   type: 'POST',
+    //   url: 'http://wishapi-auth.cloudfoundry.com/wishlist/'
+    //   data: data,
+    //   headers: {
+    //     'GX-AUTH': 
+    //   }
+    // }).done(function(res){
+    //   //{ err : {code : int, msg : string}, data : { ... } } 
+
+    // })
   }
 });

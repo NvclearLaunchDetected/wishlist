@@ -17,10 +17,10 @@
 				</tr>
 				<tr class="draggable">
 					<td class="left"></td>
-					<td>
+					<td class="title">
 						<div style="font-weight: normal; color: rgb(102, 102, 102); font-family: Arial, Helvetica, Verdana, sans-serif; font-variant: normal; margin: 0px; padding: 0px; font-style: normal; font-size: 100%; line-height: 130%; border-collapse: collapse; border-width: 0px; border-spacing: 0px; text-align: left; outline: 0px; float: none; text-transform: none; vertical-align: top; background-color: white; table-layout: auto; min-width: 0px; min-height: 0px; text-shadow: none; width: 479px; display: block; position: relative; height: 43px; background-image: url(https://images-na.ssl-images-amazon.com/images/G/01/x-locale/communities/gifting/universal/bkm/Amazon_Wish_List_longlogo-new._V149468553_.png); background-position: 50% 0%; background-repeat: no-repeat no-repeat;">
-							<a class="close" href="#" width="17px" target="_self">
-								<img class="close" border="0" src="http://imageshack.us/a/img138/9210/closec.png" alt="Close">
+							<a class="wishlist_popup_close" href="#" width="17px" target="_self">
+								<img class="wishlist_popup_close" border="0" src="http://imageshack.us/a/img138/9210/closec.png" alt="Close">
 							</a>
 						</div>
 					</td>
@@ -39,6 +39,7 @@
 												<tr>
 													<td style="text-align:center">
 														<img class="wishlist_imagelist" height="125" width="125" src="http://image.auction.co.kr/itemimage/3c/79/62/3c7962d00.jpg" alt="Selected image" id="wishlist_popup_imagelist_img">
+														<input type="hidden" id="wishlist_popup_imagelist_selected" name='wishlist_popup_imagelist_selected'>
 													</td>
 												</tr>
 												<tr>
@@ -52,22 +53,22 @@
 										</div>
 									</td>
 									<td>
-										<input type='text' id="wishlist_popup_title" value="title" placeholder="title">
+										<input type='text' id="wishlist_popup_title" value="title" placeholder="title" class='wishlist_popup_title' name='wishlist_popup_title'>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<input type='text' id="wishlist_popup_price" value="price" placeholder="price">
+										<input type='text' id="wishlist_popup_price" value="price" placeholder="price" class='wishlist_popup_price' name='wishlist_popup_price'>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<textarea id="wishlist_popup_comment" rows='2' cols='44' placeholder='comments'></textarea>
+										<textarea id="wishlist_popup_comments" rows='2' cols='44' placeholder='comments' class='wishlist_popup_comments' name='wishlist_popup_comments'></textarea>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<button id="wishlist_popup_addtowishlist" value="Add to wishlist">Add to wishlist</button>
+										<input type='button' id="wishlist_popup_addtowishlist" value="Add to wishlist">
 									</td>
 								</tr>
 							</tbody>
