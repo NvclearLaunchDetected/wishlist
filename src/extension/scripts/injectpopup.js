@@ -1,9 +1,10 @@
 var alreadyInjected = false;
 
-function inject(){
+function inject(tabId){
+	console.log("inject on " + tabId);
 	if(alreadyInjected) return;
 
-	var popup = $(document.createElement('table'));
+	var popup = $(document.createElement('table')).attr("id", "add2wish_k2tw4YzP50x9BemQp").attr("tid", tabId);
 	popup.attr('width','518px').attr('border',0).attr('cellpadding',0).attr('cellspacing',0).addClass('wishlist_popup');
 	$(document.getElementsByTagName('body')).append(popup);
 
@@ -24,9 +25,10 @@ function inject(){
 
 		//add event handlers
 		$('.wishlist_popup_close').click(function(){
+			console.log("un-inject on " + tabId);
 			setTimeout(function(){
-				$('.wishlist_popup').remove();
-				alreadyInjected = false;				
+				$('#add2wish_k2tw4YzP50x9BemQp').remove();
+				alreadyInjected = false;
 			},0)
 		})
 
