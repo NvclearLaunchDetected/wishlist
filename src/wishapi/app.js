@@ -7,7 +7,8 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , wish = require('./routes/wish');
+  , wish = require('./routes/wish')
+  , admin = require('./routes/admin');
 
 var app = express();
 
@@ -42,6 +43,10 @@ app.del('/wishlist/:item_id', wish.removeItem);
 * User
 */
 app.post('/user/auth', user.authorization);
+
+
+app.get('/admin/user', admin.getUserList);
+app.get('/admin/wishlist', admin.getWishList);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
