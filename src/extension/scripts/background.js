@@ -4,6 +4,8 @@ var google = new OAuth2('google', {
   api_scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
 });
 
+var userinfo = {};
+
 var url_parser = new URLParser();
 
 function getGoogleUserinfo(token, cb){
@@ -35,11 +37,18 @@ chrome.browserAction.onClicked.addListener(function(tab){
   if(!google.getAccessToken() || google.isAccessTokenExpired()){
     google.authorize(function(){
       //구글 계정 정보 얻기
+      if(!google.getAccessToken()) {
+        //access 허용하지 않음. 혹은 인증 에러.
+        return;
+      }
+
       getGoogleUserinfo(google.getAccessToken(), function(info){
         if(!info){
           //구글 계정 정보 얻기 실패. 어떻게 처리하지?
           return;
         }
+
+        google.userinfo = info;
 
         authUser(google.getAccessToken(), info, function(res){
           if(res.err){
@@ -66,13 +75,24 @@ chrome.browserAction.onClicked.addListener(function(tab){
   }
   else{
     //access token이 유효함
-    chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
-      if(badge == '+'){
-        chrome.tabs.executeScript(null, {
-          code: 'inject()'
+    if(!google.userinfo){
+      getGoogleUserinfo(google.getAccessToken(), function(info){
+        if(!info){
+          //구글 계정 정보 얻기 실패. 어떻게 처리하지?
+          return;
+        }
+
+        google.userinfo = info;
+
+        chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
+          if(badge == '+'){
+            chrome.tabs.executeScript(null, {
+              code: 'inject()'
+            });
+          }
         });
-      }
-    });
+      });
+    }
   }
 });
 
@@ -104,26 +124,30 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
     cb({html: $('#wishlist_popup').html()});
   }
 
+
   if('addToWishlist' == info.msg){
     var data = {
-      market: 'gmarket',
+      market: url_parser.getMarket(info.arg.url),
       title: info.arg.wishlist_popup_title,
       price: info.arg.wishlist_popup_price,
       comments: info.arg.wishlist_popup_comments,
       imageurl: info.arg.wishlist_popup_imagelist_selected,
-      url: 'test'
+      url: info.arg.url
     };
 
-    // $.ajax({
-    //   type: 'POST',
-    //   url: 'http://wishapi-auth.cloudfoundry.com/wishlist/'
-    //   data: data,
-    //   headers: {
-    //     'GX-AUTH': 
-    //   }
-    // }).done(function(res){
-    //   //{ err : {code : int, msg : string}, data : { ... } } 
+    $.ajax({
+       type: 'POST',
+       url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+       data: data,
+       headers: {
+         'GX-AUTH': 'ga=' + google.userinfo.email + '&token=' + google.getAccessToken()
+       }
+     }).done(cb).error(function(error){
+      cb({err:{msg: 'unknown error!'}});
+     })
 
-    // })
+
+    //listener must return true if you want to send a response after the listener returns
+    return true;
   }
 });

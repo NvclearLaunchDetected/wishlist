@@ -12,10 +12,16 @@ function URLParser(){
 	}
 
 	this.isProduct = function(url){
-		if(!url) return null;
-		var market = url.match(market_sig);
+		var market = this.getMarket(url);
 		if(!market || !market.length) return null;
 
 		return url.match(market_product_sig[market[0].toLowerCase()]);
 	}
+
+	this.getMarket = function(url){
+		if(!url) return null;
+		return url.match(market_sig);
+	}
+
+
 }

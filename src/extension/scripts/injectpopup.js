@@ -46,6 +46,7 @@ function inject(){
 
 		$('#wishlist_popup_addtowishlist').click(function(){
 			var form_data = $('#wishlist_popup_form').serializeJSON();
+			form_data.url = document.location.href;
 			addToWishlist(form_data);
 		})
 	});
@@ -53,7 +54,18 @@ function inject(){
 
 function addToWishlist(data){
 	chrome.extension.sendMessage({msg: 'addToWishlist', arg:data}, function(res){
+		//{ err : {code : int, msg : string}, data : { ... } } 
+		if(res.err){
+			alert(res.err.msg);
+			return;
+		}
 
+		if(!res.data){
+			alert('unknown error!!');
+			return;
+		}
+
+		alert('added');
 	})
 }
 
