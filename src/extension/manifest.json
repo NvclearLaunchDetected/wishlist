@@ -36,12 +36,12 @@
 	    }
 	],
 	"permissions": [
-		"tabs",
-		"background",
-		"https://accounts.google.com/o/oauth2/token",
-    	"https://www.googleapis.com/",
-    	"*://wishapi-auth.cloudfoundry.com/*"
-    	"*://*.auction.co.kr/*"
+		"tabs"
+		,"background"
+		,"https://accounts.google.com/o/oauth2/token"
+    	,"https://www.googleapis.com/"
+    	,"*://wishapi-auth.cloudfoundry.com/*"
+    	,"*://*.auction.co.kr/*"
     	,"*://*.gmarket.co.kr/*"
 	]
 
