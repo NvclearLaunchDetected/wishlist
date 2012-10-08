@@ -45,7 +45,6 @@ function inject(){
 		})
 
 		$('#wishlist_popup_addtowishlist').click(function(){
-			debugger;
 			var form_data = $('#wishlist_popup_form').serializeJSON();
 			addToWishlist(form_data);
 		})
