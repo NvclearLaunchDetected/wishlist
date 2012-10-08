@@ -1,7 +1,7 @@
 {
 	//"update_url":"",
 	"name": "wishlist",
-	"version": "0.1",
+	"version": "0.2",
 	"manifest_version": 2,
 	"description": "wishlist",
 	"background": {
@@ -31,7 +31,6 @@
 	    	],
 	    	"css": [
 	    		"css/popup.css"
-	    		//,"css/bootstrap.min.css"
 	    	]
 	    }
 	],
