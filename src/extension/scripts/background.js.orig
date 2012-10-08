@@ -31,8 +31,16 @@ function authUser(token, info, cb){
 
 //browser action
 chrome.browserAction.onClicked.addListener(function(tab){
+<<<<<<< HEAD
   //access token이 유효하지 않음.
   if(!google.getAccessToken() || google.isAccessTokenExpired()){
+=======
+  //기본 browser action 버튼은 무기능?
+  //혹은 사용 안내 페이지?
+  //그저 인증 수행할 뿐...
+
+  /*if(!google.getAccessToken()){
+>>>>>>> issue_3
     google.authorize(function(){
       //구글 계정 정보 얻기
       getGoogleUserinfo(google.getAccessToken(), function(info){
@@ -53,30 +61,26 @@ chrome.browserAction.onClicked.addListener(function(tab){
           }
 
           //계정인증 성공. wishlist action 수행
-          chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
-            if(badge == '+'){
-              chrome.tabs.executeScript(null, {
-                code: 'inject()'
-              });
-            }
-          })
+          return;
         })
       })
-    });
+    })
+<<<<<<< HEAD
   }
-  else{
-    //access token이 유효함
-    chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
-      if(badge == '+'){
-        chrome.tabs.executeScript(null, {
-          code: 'inject()'
-        });
-      }
-    });
-  }
-});
 
+  //access token이 유효한 경우 그저 wishlist action 수행
+=======
+  }*/
 
+  chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
+    if(badge == '+'){
+      chrome.tabs.executeScript(null, {
+        code: 'inject()'
+      });
+    }
+  })
+>>>>>>> issue_3
+})
 
 //tabs handler
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){

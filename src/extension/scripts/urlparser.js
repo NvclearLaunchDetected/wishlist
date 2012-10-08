@@ -14,8 +14,8 @@ function URLParser(){
 	this.isProduct = function(url){
 		if(!url) return null;
 		var market = url.match(market_sig);
-		if(!market) return null;
+		if(!market || !market.length) return null;
 
-		return url.match(market_product_sig[market.toLowerCase()]);
+		return url.match(market_product_sig[market[0].toLowerCase()]);
 	}
 }
