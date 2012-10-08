@@ -23,7 +23,8 @@
 		"tabs",
 		"background",
 		"https://accounts.google.com/o/oauth2/token",
-    	"https://www.googleapis.com/"
+    	"https://www.googleapis.com/",
+    	"*://wishapi-auth.cloudfoundry.com/*"
 	]
 
 	//,"default_locale" : "en"
