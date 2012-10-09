@@ -717,3 +717,8 @@ PageScraper.prototype.getTitle = function() {
   }
   return title;
 };
+
+var scraper = new PageScraper();
+function getProductInfo(){
+  return {title: scraper.getTitle(), price: scraper.getPrice(), imageList: scraper.getGenericImageData()};
+}

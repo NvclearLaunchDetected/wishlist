@@ -1,28 +1,54 @@
-var wvpopup = {
-	injected: false,
-	show: function(tabId) {
-		if (wvpopup.injected) return;
+var auth = chrome.extentions.getBackgroundPage().auth;
 
-		var popup = $(document.createElement('table')).attr("id", "wvpopup_k2tw4YzP50x9BemQp").attr("tid", tabId);
-		popup.attr('width','518px').attr('border',0).attr('cellpadding',0).attr('cellspacing',0).addClass('wishlist_popup');
-		$(document.getElementsByTagName('body')).append(popup);
-
-		chrome.extension.sendMessage({msg: 'getListPopupHtml'}, function(res){
-			popup.append(res.html);
-
-			$('.wvpopup_close').click(function(){
-				wvpopup.hide(tabId);
-			});
-
-			wvpopup.injected = true;
-		});
-	},
-	hide: function(tabId) {
-		if (!wvpopup.injected) return;
-
-		setTimeout(function(){
-			$('#wvpopup_k2tw4YzP50x9BemQp').remove();
-			wvpopup.injected = false;
-		}, 0);
+var _px = {
+	google: undefined,
+	load: function(cb) {
+		$.ajax({
+			type: 'GET',
+			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+			headers: {
+				'GX-AUTH': auth.getGX()
+			}
+		})
+		.done(function(res) {
+			console.log(">> DATA : " + JSON.stringify(res));
+			cb(res);
+		})
+		.error(function(error) {
+			console.log(">> ERROR : " + JSON.stringify(error));
+			cb({err:{msg: 'unknown error!'}});
+		})
 	}
 };
+
+var _uv = {
+	render: function(d) {
+		$("#wvlist").html('');
+
+		var html = "";
+		for (var i = 0; i < d.items.length; i++) {
+			var o = d.items[i];
+
+			var h = "<tr><td>" + o.market + "</td>"
+			+ "<td><a href='" + o.url + "'>" + o.title + "</a></td>"
+			+ "<td>" + o.price + "</td>"
+			+ "<td><a href='javascript:void(0)'><i class='icon-trash'></i></a></td></tr>";
+
+			html += h;
+		}
+
+		$("#wvlist").append(html);
+	}
+}
+
+$(document).ready(function() {
+	console.log(">> DEBUG : document.ready");
+	
+	auth.required(function() {
+		_px.load(function(res) {
+			if (!res.err) {
+				_uv.render(res.data);
+			}
+		});
+	});
+});
