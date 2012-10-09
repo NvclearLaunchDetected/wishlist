@@ -128,6 +128,25 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	 });
 })
 
+chrome.tabs.onActivated.addListener(function(activeInfo){
+  chrome.browserAction.getBadgeText({
+    tabId: activeInfo.tabId
+  }, function(badge){
+    if(badge == '+'){
+      chrome.browserAction.setPopup({
+       tabId: activeInfo.tabId,
+       popup: ''
+     });
+    }
+    else{
+      chrome.browserAction.setPopup({
+        tabId: activeInfo.tabId,
+        popup: 'wvpopup.html'
+      });
+    }
+  })
+})
+
 chrome.extension.onMessage.addListener(function(info, sender, cb){
 	if ('getListPopupHtml' == info.msg) {
 		cb({html: $('#wvpopup').html()});
