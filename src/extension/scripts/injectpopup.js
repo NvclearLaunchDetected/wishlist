@@ -20,7 +20,7 @@ function inject(tabId){
 		$('#wishlist_popup_title').val(scraper.getTitle());
 		$('#wishlist_popup_price').val(scraper.getPrice());
 		$('#wishlist_popup_imagelist_img').attr('src', imageList[selectedImageIndex].src);
-		$('#wishlist_popup_imagelist_selected').val(encodeURIComponent(imageList[selectedImageIndex].src));
+		$('#wishlist_popup_imagelist_selected').val(imageList[selectedImageIndex].src);
 		$('#wishlist_popup_imagelist_count').text(selectedImageIndex+1 + ' / ' + imageList.length);
 
 		//add event handlers
