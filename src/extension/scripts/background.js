@@ -140,7 +140,7 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 
 	if('addToWishlist' == info.msg){
 		var data = {
-			market: url_parser.getMarket(info.arg.url),
+			market: url_parser.getMarket(info.arg.url)[0],
 			title: info.arg.wishlist_popup_title,
 			price: info.arg.wishlist_popup_price,
 			comments: info.arg.wishlist_popup_comments,
@@ -151,8 +151,8 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 		$.ajax({
 			 type: 'POST',
 			 url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-			 data: JSON.stringify(data),
-       contentType: 'application/x-xxx-form-urlencoded',
+			 data: data,
+       contentType: 'application/x-www-form-urlencoded',
 			 headers: {
 				 'GX-AUTH': 'ga=' + google.userinfo.email + '&token=' + google.getAccessToken()
 			 }
