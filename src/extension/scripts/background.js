@@ -151,7 +151,8 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 		$.ajax({
 			 type: 'POST',
 			 url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-			 data: data,
+			 data: JSON.stringify(data),
+       contentType: 'application/x-xxx-form-urlencoded',
 			 headers: {
 				 'GX-AUTH': 'ga=' + google.userinfo.email + '&token=' + google.getAccessToken()
 			 }
