@@ -46,9 +46,7 @@ exports.authorization = function(req, res){
 					});
 				}
 				else{
-					res.json({
-						data : true								
-					});
+					res.json({});
 				}
 			};
 

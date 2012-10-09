@@ -37,7 +37,9 @@ exports.getWishList = function(req, res){
         // range 조건
         var range = {sort:{reg_date:-1}};
 
-        range.limit = (page_size == undefined)?10:page_size;
+        page_size = (page_size == undefined)?10:page_size;
+        range.limit = page_size;
+
         if(page_no != undefined){
           range.skip = page_no * page_size;
         }
@@ -57,24 +59,22 @@ exports.getWishList = function(req, res){
             }
             else {
               res.json({
-                data : {
-                  t : count,
-                  p : page_no,
-                  s : page_size,
-                  items : items
-                }
+                t : count,
+                p : page_no,
+                s : page_size,
+                items : items
               });
             }
         };
 
-        Item.find(query, null, range, itemFindCallback);
+        var select = "market title price market_item_id comments url imageurl reg_date";
+
+        Item.find(query, select, range, itemFindCallback);
       }
       
     };
 
     Item.count(query, itemCountCallback);
-
-    
 };
 
 exports.getUserList = function(req, res) {
@@ -89,9 +89,7 @@ exports.getUserList = function(req, res) {
       });
     }
     else {
-      res.json({
-          data : user
-      });
+      res.json(user);
     }
   }
 
