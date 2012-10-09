@@ -10,7 +10,8 @@
 	"browser_action": {
 		//"default_icon": "img/shopping-cart-full.ico",
 		"default_icon": "img/myfav_i19.png",
-		"default_title": "wishlist"
+		"default_title": "wishlist",
+		"default_popup": "wvpopup.html"
 	},
 	"content_scripts": [
 	    //content script for google oauth2
