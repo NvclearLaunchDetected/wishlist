@@ -98,14 +98,16 @@ exports.addItem = function(req, res) {
     }
     else {
       var info = req.body;
-
+      //console.log(info);
       var item = new Item({
         market : info.market,
         title : info.title,
         price : info.price,
         market_item_id : info.market_item_id,
+        comments : info.comments,
         url : info.url,
-        user_id : mongoose.Types.ObjectId(user._id)
+        imageurl : info.imageurl,
+        user_id : user._id
       });
 
       var itemCallback = function(err){
