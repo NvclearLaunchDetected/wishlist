@@ -10,6 +10,7 @@ exports.CAN_NOT_SAVE_USER =  20002;
 exports.CAN_NOT_FIND_ITEM =  30001;
 exports.CAN_NOT_SAVE_ITEM =  30002;
 exports.CAN_NOT_REMOVE_ITEM =  30003;
+exports.CAN_NOT_COUNT_ITEM =  30004;
 
 // etc.
 exports.CAN_NOT_GET_AUTH_INFO =  10001;

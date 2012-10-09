@@ -34,6 +34,8 @@ exports.getWishList = function(req, res){
     else {
       var market = req.query.market;
       var market_item_id = req.query.market_item_id;
+      var page_size = req.query.ps;
+      var page_no = req.params.page_no;
 
       // 조회 조건
       var query = {};
@@ -47,26 +49,56 @@ exports.getWishList = function(req, res){
         query.market_item_id = market_item_id;
       }
 
-      query.user_id = user._id;
-
-      var itemFindCallback = function(err, items){
-        if(err){
-            console.log(err);
-            res.json({
-              err : {
-                code : err_code.CAN_NOT_FIND_ITEM,
-                msg : err.message
-              }
-            });
+      var itemCountCallback = function(err, count){
+      if(err){
+        console.log(err);
+        res.json({
+          err : {
+            code : err_code.CAN_NOT_COUNT_ITEM,
+            msg : err.message
           }
-          else {
-            res.json({
-              data : items
-            });
-          }
-      };
+        });
+      }
+      else{
+        // range 조건
+        var range = {sort:{reg_date:-1}};
 
-      Item.find(query, itemFindCallback);
+        range.limit = (page_size == undefined)?10:page_size;
+        if(page_no != undefined){
+          range.skip = page_no * page_size;
+        }
+        else {
+          page_no = 0;
+        }
+
+        var itemFindCallback = function(err, items){
+          if(err){
+              console.log(err);
+              res.json({
+                err : {
+                  code : err_code.CAN_NOT_FIND_ITEM,
+                  msg : err.message
+                }
+              });
+            }
+            else {
+              res.json({
+                data : {
+                  t : count,
+                  p : page_no,
+                  s : page_size,
+                  items : items
+                }
+              });
+            }
+        };
+
+        Item.find(query, null, range, itemFindCallback);
+      }
+      
+    };
+
+    Item.count(query, itemCountCallback);
     }
   };
 

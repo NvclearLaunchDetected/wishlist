@@ -10,37 +10,71 @@ var Item = db.model('Item', schema.item),
 exports.getWishList = function(req, res){
     var market = req.query.market;
     var market_item_id = req.query.market_item_id;
+    var page_size = req.query.ps;
+    var page_no = req.params.page_no;
 
     // 조회 조건
     var query = {};
 
-    if (market != undefined)
-    {
+    if (market != undefined){
       query.market = market;
     }
-    if( market_item_id != undefined)
-    {
+    if( market_item_id != undefined){
       query.market_item_id = market_item_id;
     }
 
-    var itemFindCallback = function(err, items){
+    var itemCountCallback = function(err, count){
       if(err){
-          console.log(err);
-          res.json({
-            err : {
-              code : err_code.CAN_NOT_FIND_ITEM,
-              msg : err.message
-            }
-          });
+        console.log(err);
+        res.json({
+          err : {
+            code : err_code.CAN_NOT_COUNT_ITEM,
+            msg : err.message
+          }
+        });
+      }
+      else{
+        // range 조건
+        var range = {sort:{reg_date:-1}};
+
+        range.limit = (page_size == undefined)?10:page_size;
+        if(page_no != undefined){
+          range.skip = page_no * page_size;
         }
         else {
-          res.json({
-            data : items
-          });
+          page_no = 0;
         }
+
+        var itemFindCallback = function(err, items){
+          if(err){
+              console.log(err);
+              res.json({
+                err : {
+                  code : err_code.CAN_NOT_FIND_ITEM,
+                  msg : err.message
+                }
+              });
+            }
+            else {
+              res.json({
+                data : {
+                  t : count,
+                  p : page_no,
+                  s : page_size,
+                  items : items
+                }
+              });
+            }
+        };
+
+        Item.find(query, null, range, itemFindCallback);
+      }
+      
     };
 
-    Item.find(query, itemFindCallback);
+    Item.count(query, itemCountCallback);
+
+    
 };
 
 exports.getUserList = function(req, res) {

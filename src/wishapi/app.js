@@ -35,6 +35,7 @@ app.configure('development', function(){
  * WishList
 */ 
 app.get('/wishlist', wish.getWishList);
+app.get('/wishlist/:page_no', wish.getWishList);
 app.post('/wishlist', wish.addItem);
 app.del('/wishlist/:item_id', wish.removeItem);
 //app.get('/catalog/list', catalog.list);
@@ -46,6 +47,7 @@ app.post('/user/auth', user.authorization);
 
 
 app.get('/admin/user', admin.getUserList);
+app.get('/admin/wishlist/:page_no', admin.getWishList);
 app.get('/admin/wishlist', admin.getWishList);
 
 http.createServer(app).listen(app.get('port'), function(){
