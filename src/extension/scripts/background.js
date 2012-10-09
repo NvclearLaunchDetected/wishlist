@@ -32,78 +32,78 @@ function authUser(token, info, cb){
 }
 
 //browser action
-chrome.browserAction.onClicked.addListener(function(tab){
-	console.log("C...cliked");
-	//access token이 유효하지 않음.
-	if(!google.getAccessToken() || google.isAccessTokenExpired()){
-		google.authorize(function(){
-			//구글 계정 정보 얻기
-			if(!google.getAccessToken()) {
-				//access 허용하지 않음. 혹은 인증 에러.
-				return;
-			}
+// chrome.browserAction.onClicked.addListener(function(tab){
+// 	console.log("C...cliked");
+// 	//access token이 유효하지 않음.
+// 	if(!google.getAccessToken() || google.isAccessTokenExpired()){
+// 		google.authorize(function(){
+// 			//구글 계정 정보 얻기
+// 			if(!google.getAccessToken()) {
+// 				//access 허용하지 않음. 혹은 인증 에러.
+// 				return;
+// 			}
 
-			getGoogleUserinfo(google.getAccessToken(), function(info){
-				if(!info){
-					//구글 계정 정보 얻기 실패. 어떻게 처리하지?
-					return;
-				}
+// 			getGoogleUserinfo(google.getAccessToken(), function(info){
+// 				if(!info){
+// 					//구글 계정 정보 얻기 실패. 어떻게 처리하지?
+// 					return;
+// 				}
 
-				google.userinfo = info;
+// 				google.userinfo = info;
 
-				authUser(google.getAccessToken(), info, function(res){
-					if(res.err){
-						//wishlist 계정 인증 실패. 어쩌지?
-						return;
-					}
+// 				authUser(google.getAccessToken(), info, function(res){
+// 					if(res.err){
+// 						//wishlist 계정 인증 실패. 어쩌지?
+// 						return;
+// 					}
 
-					if(!res.data){
-						//얘도 계정 인증 실패. 어쩌지?
-						return;
-					}
+// 					if(!res.data){
+// 						//얘도 계정 인증 실패. 어쩌지?
+// 						return;
+// 					}
 
-					//계정인증 성공. wishlist action 수행
-					chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
-						if(badge == '+'){
-							chrome.tabs.executeScript(null, {
-								code: 'inject(' + tab.id + ')'
-							});
-						}
-					})
-				})
-			})
-		});
-	}
-	else{
-		//access token이 유효함
-		if(!google.userinfo){
-			getGoogleUserinfo(google.getAccessToken(), function(info){
-				if(!info){
-					//구글 계정 정보 얻기 실패. 어떻게 처리하지?
-					return;
-				}
+// 					//계정인증 성공. wishlist action 수행
+// 					chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
+// 						if(badge == '+'){
+// 							chrome.tabs.executeScript(null, {
+// 								code: 'inject(' + tab.id + ')'
+// 							});
+// 						}
+// 					})
+// 				})
+// 			})
+// 		});
+// 	}
+// 	else{
+// 		//access token이 유효함
+// 		if(!google.userinfo){
+// 			getGoogleUserinfo(google.getAccessToken(), function(info){
+// 				if(!info){
+// 					//구글 계정 정보 얻기 실패. 어떻게 처리하지?
+// 					return;
+// 				}
 
-				google.userinfo = info;
+// 				google.userinfo = info;
 
-				chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
-					if(badge == '+'){
-						chrome.tabs.executeScript(null, {
-							code: 'inject(' + tab.id + ')'
-						});
-					}
-				});
-			});
-		} else {
-			chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
-				if(badge == '+'){
-					chrome.tabs.executeScript(null, {
-						code: 'inject(' + tab.id + ')'
-					});
-				}
-			});
-		}
-	}
-});
+// 				chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
+// 					if(badge == '+'){
+// 						chrome.tabs.executeScript(null, {
+// 							code: 'inject(' + tab.id + ')'
+// 						});
+// 					}
+// 				});
+// 			});
+// 		} else {
+// 			chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
+// 				if(badge == '+'){
+// 					chrome.tabs.executeScript(null, {
+// 						code: 'inject(' + tab.id + ')'
+// 					});
+// 				}
+// 			});
+// 		}
+// 	}
+// });
 
 
 

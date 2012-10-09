@@ -1,0 +1,42 @@
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<script src="libs/jquery.1.8.1.min.js"></script>
+<script src="libs/jquery.formserialize.js"></script>
+<script src="libs/bootstrap.min.js"></script>
+<script src="scripts/awpopup.js"></script>
+<body style="padding: 10px">
+<form class="form-horizontal">
+	<legend>Add to wishlist</legend>
+	<div class="control-group">
+		<label class="control-label" for="inputTitle">Image</label>
+		<div class="controls">
+		  <img src="http://www.w3schools.com/images/colormap_80.gif" style="max-height: 125px; max-width: 125px; height: 125px; width: 125px;">
+		  <a href="javascript:void(0)">&lt;</a>
+		  <nobr>1/1</nobr>
+		  <a href="javascript:void(0)">&gt;</a>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputTitle">Title</label>
+		<div class="controls">
+		  <input type="text" id="inputTitle" name="inputTitle" placeholder="Title" style="height: 30px;">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputPrice">Price</label>
+		<div class="controls">
+		  <input type="text" id="inputPrice" name="inputPrice" placeholder="Price" style="height: 30px;">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputComments">Comments</label>
+		<div class="controls">
+			<textarea id="inputComments" name="inputComments" rows="3" placeholder="comments"></textarea>
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+		  <input type="button" id="addToWishlist" value="Add" class="btn"></input>
+		</div>
+	</div>
+</form>
+</body>

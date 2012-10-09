@@ -10,7 +10,8 @@
 	"browser_action": {
 		//"default_icon": "img/shopping-cart-full.ico",
 		"default_icon": "img/myfav_i19.png",
-		"default_title": "wishlist"
+		"default_title": "wishlist",
+		"default_popup": "awpopup.html"
 	},
 	"content_scripts": [
 	    //content script for google oauth2
@@ -27,9 +28,7 @@
 	    	"js": [
 	    		"libs/jquery.1.8.1.min.js"
 	    		,"scripts/pagescraper.js"
-	    		,"scripts/injectpopup.js"
-	    		,"scripts/wvpopup.js"
-	    		
+	    		,"scripts/injectpopup.js"	    		
 	    	],
 	    	"css": [
 	    		"css/popup.css"
