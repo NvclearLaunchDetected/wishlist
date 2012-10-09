@@ -1,4 +1,4 @@
-// var url_parser = new URLParser();
+var url_parser = new URLParser();
 
 // //tabs handler
 // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
@@ -40,47 +40,43 @@
 //   })
 // })
 
-// chrome.extension.onMessage.addListener(function(info, sender, cb){
-// 	if ('getProductInfo' == info.msg){
-// 		chrome.tabs.executeScript(null, {code: 'getProductInfo()'}, function(res){
-// 			cb(res);
-// 		})
+chrome.extension.onMessage.addListener(function(info, sender, cb){
+	if ('getProductInfo' == info.msg){
+		chrome.tabs.executeScript(null, {code: 'getProductInfo()'}, function(res){
+		 	cb(res[0]);
+		})
 
-// 		return true;
-// 	}
+		return true;
+	}
 
-// 	if ('getListPopupHtml' == info.msg) {
-// 		cb({html: $('#wvpopup').html()});
-// 	}
+	if ('getListPopupHtml' == info.msg) {
+		cb({html: $('#wvpopup').html()});
+	}
 
-// 	if('getPopupHtml' == info.msg){
-// 		cb({html: $('#wishlist_popup').html()});
-// 	}
+	if('addToWishlist' == info.msg){
+		var data = {
+			market: url_parser.getMarket(info.arg.url)[0],
+			title: info.arg.wishlist_popup_title,
+			price: info.arg.wishlist_popup_price,
+			comments: info.arg.wishlist_popup_comments,
+			imageurl: info.arg.wishlist_popup_imagelist_selected,
+			url: info.arg.url
+		};
 
-// 	if('addToWishlist' == info.msg){
-// 		var data = {
-// 			market: url_parser.getMarket(info.arg.url)[0],
-// 			title: info.arg.wishlist_popup_title,
-// 			price: info.arg.wishlist_popup_price,
-// 			comments: info.arg.wishlist_popup_comments,
-// 			imageurl: info.arg.wishlist_popup_imagelist_selected,
-// 			url: info.arg.url
-// 		};
-
-// 		$.ajax({
-// 			 type: 'POST',
-// 			 url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-// 			 data: data,
-//        contentType: 'application/x-www-form-urlencoded',
-// 			 headers: {
-// 				 'GX-AUTH': auth.getGX()
-// 			 }
-// 		 }).done(cb).error(function(error){
-// 			cb({err:{msg: 'unknown error!'}});
-// 		 })
+		$.ajax({
+			 type: 'POST',
+			 url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+			 data: data,
+       contentType: 'application/x-www-form-urlencoded',
+			 headers: {
+				 'GX-AUTH': auth.getGX()
+			 }
+		 }).done(cb).error(function(error){
+			cb({err:{msg: 'unknown error!'}});
+		 })
 
 
-// 		//listener must return true if you want to send a response after the listener returns
-// 		return true;
-// 	}
-// });
+		//listener must return true if you want to send a response after the listener returns
+		return true;
+	}
+});
