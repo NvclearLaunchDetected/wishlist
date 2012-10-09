@@ -5,14 +5,15 @@ var _px = {
 			type: 'GET',
 			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
 			headers: {
-				'GX-AUTH': 'ga=' + _px.google.userinfo.email + '&token=' + _px.google.getAccessToken()
+				'GX-AUTH': auth.getGX()
 			}
 		})
-		.done(function(data) {
-			console.log(JSON.stringify(data));
-			cb(data);
+		.done(function(res) {
+			console.log(">> DATA : " + JSON.stringify(res));
+			cb(res);
 		})
 		.error(function(error) {
+			console.log(">> ERROR : " + JSON.stringify(error));
 			cb({err:{msg: 'unknown error!'}});
 		})
 	}
@@ -20,23 +21,32 @@ var _px = {
 
 var _uv = {
 	render: function(d) {
-		var h = "";
-		for (var i = 0; i < d.length; i++) {
-			h += "<tr><td></td><td></td><td></td><td></td></tr>";
+		$("#wvlist").html('');
+
+		var html = "";
+		for (var i = 0; i < d.items.length; i++) {
+			var o = d.items[i];
+
+			var h = "<tr><td>" + o.market + "</td>"
+			+ "<td><a href='" + o.url + "'>" + o.title + "</a></td>"
+			+ "<td>" + o.price + "</td>"
+			+ "<td><a href='javascript:void(0)'><i class='icon-trash'></i></a></td></tr>";
+
+			html += h;
 		}
 
-		$("#wvlist").append(h);
+		$("#wvlist").append(html);
 	}
 }
 
 $(document).ready(function() {
-	_px.google = chrome.extension.getBackgroundPage().google;
-
-	console.log(JSON.stringify(_px.google));
-
-	_px.load(function(data) {
-		if (!data.err) {
-			_uv.render(data);
-		}
+	console.log(">> DEBUG : document.ready");
+	
+	auth.required(function() {
+		_px.load(function(res) {
+			if (!res.err) {
+				_uv.render(res.data);
+			}
+		});
 	});
 });
