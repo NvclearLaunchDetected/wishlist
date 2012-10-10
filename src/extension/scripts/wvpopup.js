@@ -1,3 +1,4 @@
+var auth = chrome.extension.getBackgroundPage().auth;
 var _px = {
 	google: undefined,
 	load: function(cb) {
