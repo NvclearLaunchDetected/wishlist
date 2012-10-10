@@ -4,7 +4,9 @@ var url_parser = new URLParser();
 
 //browser action
 chrome.browserAction.onClicked.addListener(function(tab){
+	console.log("button clicked");
 	auth.required(function() {
+		console.log("auth completed");
 		chrome.browserAction.getBadgeText({ tabId: tab.id }, function(badge){
 			if(badge == '+'){
 				chrome.tabs.executeScript(null, {
