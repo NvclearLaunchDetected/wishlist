@@ -56,23 +56,9 @@ $(document).ready(function(){
 		$('#addToWishlist').button('loading');
 		addToWishlist(form_data, function(res){
 			if(res.err){
-				$(that).popover({
-					animation: true,
-					placement: 'top',
-					title: '실패',
-					content: res.err.msg
-				});
-				$(that).popover('show');
 				$('#addToWishlist').button('reset');
 			}
 			else{
-				$(that).popover({
-					animation: true,
-					placement: 'right',
-					title: '성공',
-					content: '성공적으로 관심상품을 추가했습니다.'
-				});
-				$(that).popover('show');
 				$('#addToWishlist').button('complete');
 			}
 		})
@@ -94,3 +80,4 @@ function addToWishlist(data, cb){
 		})
 	})
 }
+

@@ -508,7 +508,7 @@ function getProductInfo(){
   return { title: scraper.getTitle(), 
     price: scraper.getPrice(), 
     imageList: scraper.getGenericImageData(),
-    market: marketInfo.market,
+    market: Markets.getCode(marketInfo.market),
     market_item_id: marketInfo.itemno,
     url: document.location.href
   };

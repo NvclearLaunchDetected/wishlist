@@ -11,7 +11,7 @@
 		//"default_icon": "img/shopping-cart-full.ico",
 		"default_icon": "img/myfav_i19.png",
 		"default_title": "wishlist",
-		"default_popup": "awpopup.html"
+		"default_popup": "wvpopup.html"
 	},
 	"content_scripts": [
 	    //content script for google oauth2
@@ -28,6 +28,7 @@
 	    	"js": [
 	    		"libs/jquery.1.8.1.min.js"
 	    		,"scripts/urlparser.js"
+	    		,"scripts/markets.js"
 	    		,"scripts/pagescraper.js"
 	    	]
 	    }
