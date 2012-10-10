@@ -29,7 +29,7 @@ var _mx = {
 		.done(function(res) {
 			console.log(">> DATA : " + JSON.stringify(res));
 
-			if (undefined === res.err) {
+			if (undefined === res.err && res.t && 0 < res.t) {
 				chrome.storage.local.set({ "wish": res }, function() {
 					cb(res);
 				})
