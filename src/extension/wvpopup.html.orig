@@ -5,7 +5,10 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<script src="libs/jquery.1.8.1.min.js"></script>
 		<script src="oauth2/oauth2.js"></script>
-		<script src="scripts/auth.js"></script>
+<<<<<<< HEAD
+		<script src="scripts/urlparser.js"></script>
+=======
+>>>>>>> dev
 		<script src="scripts/wvpopup.js"></script>
 	</head>
 	<body>
@@ -32,6 +35,42 @@
 						&nbsp;<br>
 						<table class="table table-striped">
 							<tbody id="wvlist">
+								<tr>
+									<td>G마켓</td>
+									<td><a href="">매콤하고 맛있는 이베이라면..zzz</a></td>
+									<td>29,800원</td>
+									<td>삭제</td>
+								</tr>
+								<tr>
+									<td>G마켓</td>
+									<td><a href="">매콤하고 맛있는 이베이라면2..zzz</a></td>
+									<td>29,800원</td>
+									<td>삭제</td>
+								</tr>
+								<tr>
+									<td>G마켓</td>
+									<td><a href="">매콤하고 맛있는 이베이라면3..zzz</a></td>
+									<td>29,800원</td>
+									<td>삭제</td>
+								</tr>
+								<tr>
+									<td>G마켓</td>
+									<td><a href="">매콤하고 맛있는 이베이라면4..zzz</a></td>
+									<td>29,800원</td>
+									<td>삭제</td>
+								</tr>
+								<tr>
+									<td>G마켓</td>
+									<td><a href="">매콤하고 맛있는 이베이라면5..zzz</a></td>
+									<td>29,800원</td>
+									<td>삭제</td>
+								</tr>
+								<tr>
+									<td>G마켓</td>
+									<td><a href="">매콤하고 맛있는 이베이라면6..zzz</a></td>
+									<td>29,800원</td>
+									<td>삭제</td>
+								</tr>
 							</tbody>
 						</table>
 					</td>
