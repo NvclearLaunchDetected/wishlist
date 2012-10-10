@@ -1,86 +1,102 @@
-
-var google = google || new OAuth2('google', {
+google = new OAuth2('google', {
 	client_id: '939394320283.apps.googleusercontent.com',
 	client_secret: 'SyozXTsqDKp9eUtfFFulc-uf',
 	api_scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
-});
+});	
 
-var auth = auth || {
-	getGX: function() {
-		return 'ga=' + google.userinfo.email + '&token=' + google.getAccessToken();
-	},
-	getGoogleUserinfo: function(token, cb) {
-		$.ajax({
-			type: 'get',
-			url: 'https://www.googleapis.com/oauth2/v1/userinfo',
-			headers: {
-				'Authorization': 'OAuth ' + token
-			}
-		})
-		.done(cb);
-	},
-	authUser: function(token, info, cb) {
-		$.ajax({
-			type: 'post',
-			url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
-			data: {
-				token: token,
-				name: info.name,
-				email: info.email,
-				siteName: 'google'
-			}
-		})
-		.done(cb);
-	},
-	required: function(cb) {
-	  //access token이 유효하지 않음.
-		if(!google.getAccessToken() || google.isAccessTokenExpired()){
-			google.authorize(function(){
-				//구글 계정 정보 얻기
-				if(!google.getAccessToken()) {
-					//access 허용하지 않음. 혹은 인증 에러.
+function Auth(){
+	console.log('init auth');
+}
+
+Auth.prototype.getGX = function(cb){
+	var authorize = this.authorize;
+	chrome.storage.local.get(function(userdata){
+		if(!userdata || !userdata.token || !userdata.email){
+			//auth 태워야함
+			authorize(function(userinfo){
+				if(!uesrinfo){
+					cb('unknown error');
 					return;
 				}
 
-				auth.getGoogleUserinfo(google.getAccessToken(), function(info){
-					if(!info){
-						//구글 계정 정보 얻기 실패. 어떻게 처리하지?
-						return;
-					}
+				if(userinfo.err){
+					cb(userinfo.err.msg);
+					return;
+				}
 
-					google.userinfo = info;
-
-					auth.authUser(google.getAccessToken(), info, function(res){
-						if(res.err){
-							//wishlist 계정 인증 실패. 어쩌지?
-							return;
-						}
-
-						if(!res.data){
-							//얘도 계정 인증 실패. 어쩌지?
-							return;
-						}
-
-						cb();
-					})
-				})
-			});
-		} else {
-			//access token이 유효함
-			if(!google.userinfo) {
-				auth.getGoogleUserinfo(google.getAccessToken(), function(info){
-					if(!info){
-						//구글 계정 정보 얻기 실패. 어떻게 처리하지?
-						return;
-					}
-
-					google.userinfo = info;
-
-					cb();
-				});
-			} else {
-				cb();
-			}
+				cb('ga=' + userinfo.email + '&token=' + userinfo.token);
+			})
 		}
+
+		cb('ga=' + userdata.email + '&token=' + userdata.token);
+	})
+}
+
+Auth.prototype.getGoogleUserinfo = function(token, cb) {
+	console.log('calling userinfo ' +token);
+	$.ajax({
+		type: 'get',
+		url: 'https://www.googleapis.com/oauth2/v1/userinfo',
+		headers: {
+			'Authorization': 'OAuth ' + token
+		}
+	})
+	.done(cb);
+}
+
+Auth.prototype.addAuthorizedUser = function(token, info, cb) {
+	$.ajax({
+		type: 'post',
+		url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
+		data: {
+			token: token,
+			name: info.name,
+			email: info.email,
+			siteName: 'google'
+		}
+	})
+	.done(cb);
+}
+
+Auth.prototype.authorize = function(cb){
+	console.log('google:' + JSON.stringify(google));
+	var getGoogleUserinfo = this.getGoogleUserinfo;
+	var addAuthorizedUser = this.addAuthorizedUser;
+
+	function saveUserInfo(t, u, cb){
+		chrome.storage.local.get(function(userdata){
+			ud = userdata || {}
+			ud.token = t;
+			ud.name = u.name;
+			ud.email = u.email;
+			chrome.storage.local.set(ud, function(){
+				cb(ud);
+			})
+		})
 	}
-};
+
+	google.authorize(function(){
+	 	if(!google.getAccessToken()){
+	 		cb({err: {msg: "couldn't get the access token."}});
+	 		return;
+	 	}
+
+	 	var accessToken = google.getAccessToken();
+ 		getGoogleUserinfo(accessToken, function(info){
+			if(!info){
+				cb({err: {msg: "couldn't get the user info."}});
+				return;
+			}
+
+			addAuthorizedUser(accessToken, info, function(res){
+				if(res.err){
+					cb(res);
+					return;
+				}
+
+				//완죤 다 성공.
+				saveUserInfo(accessToken, info, cb);
+			})
+		});
+	});
+}
