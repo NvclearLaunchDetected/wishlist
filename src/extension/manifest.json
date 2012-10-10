@@ -4,6 +4,7 @@
 	"version": "0.2",
 	"manifest_version": 2,
 	"description": "wishlist",
+	"options_page": "options.html",
 	"background": {
 		"scripts": [
 			"libs/jquery.1.8.1.min.js"
@@ -11,7 +12,7 @@
 			,"scripts/urlparser.js"
 			,"scripts/auth.js"
 			,"scripts/lifetime.js"
-			// ,"scripts/eventhandler.js"
+			,"scripts/eventhandler.js"
 		],
 		"persistent": false
 	},
@@ -27,6 +28,11 @@
 	      "matches": ["http://www.google.com/robots.txt*"],
 	      "js": ["oauth2/oauth2_inject.js"],
 	      "run_at": "document_start"
+	    },
+	    {
+	    	"matches": ["http://www.google.co.kr/*"],
+	    	"js": ["scripts/auth_inject.js"],
+	    	"run_at": "document_start"
 	    },
 	    {
 	    	"matches": [
@@ -54,13 +60,13 @@
     	,"https://www.googleapis.com/"
     	,"*://wishapi-auth.cloudfoundry.com/*"
     	,"*://*.auction.co.kr/*"
-    	,"*://*.gmarket.co.kr/*"
-    	,"*://*.interpark.com/*"
+		,"*://*.gmarket.co.kr/*"
+		,"*://*.interpark.com/*"
     	,"*://*.11st.co.kr/*"
     	,"*://*.cjmall.com/*"
     	,"*://*.lotte.com/*"
     	,"*://*.lotteimall.com/*"
-	]
+	]	
 
 	//,"default_locale" : "en"
 }

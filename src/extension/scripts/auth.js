@@ -8,13 +8,18 @@ function Auth(){
 	console.log('init auth');
 }
 
-Auth.prototype.getGX = function(cb){
+Auth.prototype.clear = function(cb){
+	google.clearAccessToken()
+	chrome.storage.local.remove(['token', 'email', 'name'], cb);
+}
+
+Auth.prototype.getAuthInfo = function(cb){
 	var authorize = this.authorize;
 	chrome.storage.local.get(function(userdata){
 		if(!userdata || !userdata.token || !userdata.email){
 			//auth 태워야함
 			authorize(function(userinfo){
-				if(!uesrinfo){
+				if(!userinfo){
 					cb('unknown error');
 					return;
 				}
@@ -24,54 +29,58 @@ Auth.prototype.getGX = function(cb){
 					return;
 				}
 
-				cb('ga=' + userinfo.email + '&token=' + userinfo.token);
+				cb(userinfo);
 			})
 		}
 
-		cb('ga=' + userdata.email + '&token=' + userdata.token);
+		cb(userdata);
 	})
 }
 
-Auth.prototype.getGoogleUserinfo = function(token, cb) {
-	console.log('calling userinfo ' +token);
-	$.ajax({
-		type: 'get',
-		url: 'https://www.googleapis.com/oauth2/v1/userinfo',
-		headers: {
-			'Authorization': 'OAuth ' + token
-		}
+Auth.prototype.getGX = function(cb){
+	this.getAuthInfo(function(authInfo){
+		cb('ga=' + authInfo.email + '&token=' + authInfo.token);
 	})
-	.done(cb);
-}
-
-Auth.prototype.addAuthorizedUser = function(token, info, cb) {
-	$.ajax({
-		type: 'post',
-		url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
-		data: {
-			token: token,
-			name: info.name,
-			email: info.email,
-			siteName: 'google'
-		}
-	})
-	.done(cb);
 }
 
 Auth.prototype.authorize = function(cb){
 	console.log('google:' + JSON.stringify(google));
-	var getGoogleUserinfo = this.getGoogleUserinfo;
-	var addAuthorizedUser = this.addAuthorizedUser;
+	
+	function getGoogleUserinfo(token, cb) {
+		console.log('calling userinfo ' +token);
+		$.ajax({
+			type: 'get',
+			url: 'https://www.googleapis.com/oauth2/v1/userinfo',
+			headers: {
+				'Authorization': 'OAuth ' + token
+			}
+		})
+		.done(cb);
+	}
+	
+	function addAuthorizedUser(token, info, cb) {
+		$.ajax({
+			type: 'post',
+			url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
+			data: {
+				token: token,
+				name: info.name,
+				email: info.email,
+				siteName: 'google'
+			}
+		})
+		.done(cb);
+	}
 
 	function saveUserInfo(t, u, cb){
-		chrome.storage.local.get(function(userdata){
-			ud = userdata || {}
-			ud.token = t;
-			ud.name = u.name;
-			ud.email = u.email;
-			chrome.storage.local.set(ud, function(){
-				cb(ud);
-			})
+		var info = {
+			token: t,
+			email: u.email,
+			name: u.name
+		};
+
+		chrome.storage.local.set(info, function(){
+			cb(info);
 		})
 	}
 

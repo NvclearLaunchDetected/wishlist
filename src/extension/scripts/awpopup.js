@@ -1,6 +1,4 @@
-
-var auth = chrome.extension.getBackgroundPage().auth;
-var url_parser = chrome.extension.getBackgroundPage().url_parser;
+var url_parser = new URLParser();
 var scrapInfo = {};
 var selectedImageIndex = 0;
 
@@ -68,18 +66,20 @@ $(document).ready(function(){
 });
 
 function addToWishlist(data, cb){
-	auth.required(function(){
+	var auth = new Auth();
+
+	auth.getGX(function(gx){
 		$.ajax({
 			type: 'POST',
 			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
 			data: data,
-	   		contentType: 'application/x-www-form-urlencoded',
+				contentType: 'application/x-www-form-urlencoded',
 			headers: {
-				'GX-AUTH': auth.getGX()
+				'GX-AUTH': gx
 			}
 		}).done(cb).error(function(error){
 			cb({err:{msg: 'unknown error!'}});
 		})
-	})
+	});
 }
 

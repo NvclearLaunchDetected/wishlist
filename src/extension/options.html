@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="libs/jquery.1.8.1.min.js"></script>
+		<script src="oauth2/oauth2.js"></script>
+		<script src='scripts/auth.js'></script>
+		<script src="scripts/options.js"></script>
+	</head>
+
+	<body>
+		<form class="form-horizontal">
+			<legend>계정정보</legend>
+			<div class="control-group">
+		    	<label class="control-label" for="inputEmail">Email</label>
+		    <div class="controls">
+		      <input type="text" id="inputEmail" placeholder="Email" readonly='true'>
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <label class="control-label" for="inputName">Name</label>
+		    <div class="controls">
+		      <input type="text" id="inputName" placeholder="Name" readonly='true'>
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <div class="controls">
+		      <input type='button' id='relogin' class="btn" value='다른 계정으로 로그인'>
+		    </div>
+		  </div>
+		  <legend>기타설정</legend>
+		  <div class="control-group">
+		  	<label class="control-label">등록가능 알림배너</label>
+		  	<div class="controls">
+		  		<label class="checkbox">
+		        	<input type="checkbox"> 사용
+		     	</label>
+		  	</div>
+		  </div>
+			<div class="control-group">
+				<div class="controls">
+					<input type='button' id='save' class="btn btn-primary" value='저장'>
+				</div>
+			</div>
+		</form>
+	</body>
+</html>
