@@ -2,6 +2,7 @@
 <script src="libs/jquery.1.8.1.min.js"></script>
 <script src="libs/jquery.formserialize.js"></script>
 <script src="libs/bootstrap.min.js"></script>
+<script src="libs/bootstrap.plugin.myalert.js"></script>
 <script src="scripts/awpopup.js"></script>
 <body style="padding: 10px">
 <form class="form-horizontal">
@@ -9,34 +10,38 @@
 	<div class="control-group">
 		<label class="control-label" for="inputTitle">Image</label>
 		<div class="controls">
-		  <img src="http://www.w3schools.com/images/colormap_80.gif" style="max-height: 125px; max-width: 125px; height: 125px; width: 125px;">
-		  <a href="javascript:void(0)">&lt;</a>
-		  <nobr>1/1</nobr>
-		  <a href="javascript:void(0)">&gt;</a>
+		  <img id='selectedImage' src="http://www.w3schools.com/images/colormap_80.gif" style="max-height: 125px; max-width: 125px; height: 125px; width: 125px;">
+		  <a id="prevImage" href="#">&lt;</a>
+		  <nobr id='selectedImageNum'>1/1</nobr>
+		  <a id="nextImage" href="#">&gt;</a>
+		  <input type='hidden' id='inputImage' name='imageurl'>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="inputTitle">Title</label>
 		<div class="controls">
-		  <input type="text" id="inputTitle" name="inputTitle" placeholder="Title" style="height: 30px;">
+		  <input type="text" id="inputTitle" name="title" placeholder="Title" style="height: 30px;">
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="inputPrice">Price</label>
 		<div class="controls">
-		  <input type="text" id="inputPrice" name="inputPrice" placeholder="Price" style="height: 30px;">
+		  <input type="text" id="inputPrice" name="price" placeholder="Price" style="height: 30px;">
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="inputComments">Comments</label>
 		<div class="controls">
-			<textarea id="inputComments" name="inputComments" rows="3" placeholder="comments"></textarea>
+			<textarea id="inputComments" name="comments" rows="3" placeholder="comments"></textarea>
 		</div>
 	</div>
 	<div class="control-group">
 		<div class="controls">
-		  <input type="button" id="addToWishlist" value="Add" class="btn"></input>
+		  <input type="button" id="addToWishlist" value="Add" class="btn" data-loading-text="adding..." data-complete-text="Close">
 		</div>
 	</div>
 </form>
+<div id='alertdiv'>
+
+</div>
 </body>

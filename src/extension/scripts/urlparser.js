@@ -4,11 +4,15 @@ function URLParser(){
 
 	this.parse = function(url){
 		var captures = prodreg.exec(url);
+		if(!captures) return null;
+
 		return { market: captures[1], itemno: captures[2]};
 	}
 
 	this.isValid = function(url){
 		var prod = this.parse(url);
+		if(!prod) return false;
+		
 		return prod.market && prod.itemno;
 	}
 }

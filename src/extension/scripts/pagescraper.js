@@ -479,7 +479,6 @@ PageScraper.prototype.getElementsByClassNameFallback = function(className, elem)
       return matches;
 };
 
-
 PageScraper.prototype.extractValue = function(elem) {
       if (elem.nodeName == "IMG" || elem.nodeName == "IFRAME") {
         return elem.src;
@@ -487,217 +486,6 @@ PageScraper.prototype.extractValue = function(elem) {
         return elem.value;
       }
       return elem.innerHTML;
-};
-
-PageScraper.prototype.parseGenericVendorData = function() {
-      var postfix = '';
-      if (pageArgs && pageArgs.name) {
-        postfix = '.' + pageArgs.name;
-      }
-
-      var _object = null;
-      var obj = function () {
-          if (_object){ return _object;}
-          _object = new Object();
-          return _object;
-      }
-
-      var bkHide = document.getElementById('AUWLBkHide' + postfix);
-      if (bkHide && bkHide.innerHTML && bkHide.innerHTML.length && isBKMLocalDomain()) {
-          obj().hide = bkHide.innerHTML;
-      }
-      var bkTitle = document.getElementById('AUWLBkTitle' + postfix);
-      if (bkTitle){
-          obj().title = bkTitle.innerHTML;
-      }
-      var bkPrice = document.getElementById('AUWLBkPrice' + postfix);
-      var bkPriceLow = document.getElementById('AUWLBkPriceLow' + postfix);
-      var bkPriceHigh = document.getElementById('AUWLBkPriceHigh' + postfix);
-      var bkCurrency = document.getElementById('AUWLBkCurrency' + postfix);
-      if (bkPrice && bkPrice.innerHTML && bkPrice.innerHTML.length){
-          obj().price = bkPrice.innerHTML;
-      } else if (bkPriceLow && bkPriceLow.innerHTML && bkPriceLow.innerHTML.length
-              && bkPriceHigh && bkPriceHigh.innerHTML && bkPriceHigh.innerHTML.length) {
-          obj().price = bkPriceLow.innerHTML;
-      }
-      if (bkCurrency && bkCurrency.innerHTML && bkCurrency.innerHTML.length) {
-        obj().currency = bkCurrency.innerHTML;
-      }
-      var bkImage = document.getElementById('AUWLBkImage' + postfix);
-      if (bkImage){
-        obj().imageArray = [ {
-          "src" : bkImage.innerHTML
-        }];
-      }
-      var bkURL = document.getElementById('AUWLBkURL' + postfix);
-      if (bkURL){
-          obj().url = bkURL.innerHTML;
-      }
-
-      if (bkPageVersion) {
-        var version = parseInt(bkPageVersion.innerHTML);
-        obj().version = version;
-      }
-
-      var bkBannerImage = document.getElementById('AUWLBkBannerImage' + postfix);
-      var isAmazon = isBKMSourceDomain();
-      if(bkBannerImage && isAmazon) {
-        obj().bannerImage = bkBannerImage.innerHTML;
-      }
-
-      return _object;
-};
-
-PageScraper.prototype.parseAmazonVendorData = function() {
-
-      var itemData = new Object();
-
-      try {
-        itemData.title = document.title;
-        if(typeof itemData.title != "string") {
-          itemData.title = "";
-        }
-        try {
-          var titleBlock = document.getElementById('btAsinTitle');
-          if (titleBlock) {
-            itemData.title = titleBlock.innerText || titleBlock.textContent;
-            if (itemData.title) {
-              itemData.title = itemData.title.replace(/^\s+|\s+$/g, "");
-            }
-          }
-        } catch(e) {}
-        try {
-          itemData.asin = document.handleBuy.ASIN.value;
-        } catch (e) {
-          try {
-            var asinFieldNames = {ASIN: 1, asin: 1, o_asin: 1};
-            asinFieldNames['ASIN.0'] = 1;
-            for (var asinField in asinFieldNames) {
-              var asins = document.getElementsByName(asinField);
-              if (asins.length) {
-                itemData.asin = asins[0].value;
-                break;
-              }
-            }
-          } catch (e) {}
-        }
-        var checkTags = new Array("b", "span"); 
-        if (document.evaluate) {
-          for (var i=0; i < checkTags.length; i++) {
-            var elts = document.evaluate("//div[@id='priceBlock']//table[@class='product']//td//" + checkTags[i] + "[contains(@class,'priceLarge') or contains(@class,'price') or contains(@class,'pa_price')]",
-                         document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-            var elt = null;
-            while (elt = elts.iterateNext()) {
-              if (elt.textContent) {
-                itemData.price = elt.textContent;
-                break;
-              }
-            }
-            if (itemData.price) break;
-          }
-        } else {
-          var priceBlock = document.getElementById('priceBlock');
-          if (priceBlock) {
-            var tables = priceBlock.getElementsByTagName('table');
-            for (var i=0; i < tables.length; i++) {
-              var tableClass = tables[i].getAttribute('class') || tables[i].getAttribute('className');
-              if (tableClass == 'product') {
-                for (var j=0; i < checkTags.length; j++) {
-                  var elements = tables[i].getElementsByTagName(checkTags[j]);
-                  for (var i = 0; i < elements.length; i++) {
-                    var elementClass = elements[i].getAttribute('class') || elements[i].getAttribute('className');
-                    if (elementClass.indexOf('price') > -1 || elementClass.indexOf('priceLarge') > -1 || elementClass.indexOf('pa_price') > -1) {
-                      itemData.price = elements[i].innerHTML;
-                      break;
-                    }
-                  }
-                  if (itemData.price) break;
-                }
-              }
-            }
-          }
-        }
-
-        if (itemData && itemData.price) {
-          var priceParts = itemData.price.split("-");
-          if(priceParts[0]){
-            itemData.price = priceParts[0];
-          }
-        } 
-
-        var imageCellNames = {prodImageCell: 1, fiona_intro_noflash: 1, productheader: 1, 'kib-ma-container-1': 1, 'center-12_feature_div': 1, holderMainImage: 1};
-        var selectedImage;
-        
-        for (var imageCell in imageCellNames) {
-          var prodImageCell = document.getElementById(imageCell);
-          if (prodImageCell) {
-            var prodImages = prodImageCell.getElementsByTagName('img');
-            if(prodImages.length){
-            	var prodImageArray = new Array(prodImages.length);
-                for (var i = 0; i < prodImages.length; i++){
-            	    prodImageArray.push(prodImages[i]);
-                }
-                prodImageArray.sort(this.sortImage);
-                selectedImage = prodImageArray[0];
-	            break;
-            }
-          }
-        }
-        
-        if (selectedImage) {
-          itemData.imageArray = [{
-            "src" : selectedImage.src
-          }];
-        } else {
-          if ( itemData && !itemData.asin) {
-            itemData.imageArray = this.getGenericImageData();
-          }
-        }
-      } catch(e) {}
-
-      if(!itemData.imageArray) {
-         itemData.imageArray = [];
-      }
-      return itemData;
-};
-PageScraper.prototype.parseGoogleCheckoutVendorData = function() {
-
-      var itemData = null;
-
-    var elems = this.getElementsByClassName("product");
-
-      if (elems && elems[0]) {
-        itemData = {};
-        itemData.unverified = true;
-        var prod = elems[0];
-        var scrapedImage;
-
-        var titleElem = this.getElementsByClassName("product-title", prod);
-        if(titleElem && titleElem[0]) {
-          itemData.title = this.extractValue(titleElem[0]);
-        }
-        var priceElem = this.getElementsByClassName("product-price", prod);
-        if(priceElem && priceElem[0]) {
-          itemData.price = this.extractValue(priceElem[0]);
-        }
-        var urlElem = this.getElementsByClassName("product-url", prod);
-        if(urlElem && urlElem[0]) {
-          itemData.url = this.extractValue(urlElem[0]);
-        }
-        var imgElem = this.getElementsByClassName("product-image", prod);
-        if (imgElem && imgElem[0]) {
-          var imgSrc = this.extractValue(imgElem[0]);
-          scrapedImage = imgSrc;
-        }
-
-        itemData.imageArray = this.getGenericImageData(scrapedImage);
-      }
-
-      if(itemData && itemData.title && itemData.price) {
-          return itemData;
-      } else {
-          return null;
-      }
 };
 
 PageScraper.prototype.getTitle = function() {
@@ -709,11 +497,19 @@ PageScraper.prototype.getTitle = function() {
   title = title.replace(/\s+/g,' ');
   title = title.replace(/^\s*|\s*$/g,'');
   
-  if(document.domain.match(/amazon\.com/) && asin){
-    var titleParts = title.split(":");
-    if(titleParts[1]){
-      title = titleParts[1];
-    }
-  }
+  //사이트별 title 패턴...
   return title;
 };
+
+var scraper = new PageScraper();
+var urlparser = new URLParser();
+function getProductInfo(){
+  var marketInfo = urlparser.parse(document.location.href) || {} ;
+  return { title: scraper.getTitle(), 
+    price: scraper.getPrice(), 
+    imageList: scraper.getGenericImageData(),
+    market: Markets.getCode(marketInfo.market),
+    market_item_id: marketInfo.itemno,
+    url: document.location.href
+  };
+}
