@@ -28,9 +28,12 @@ var _mx = {
 		})
 		.done(function(res) {
 			console.log(">> DATA : " + JSON.stringify(res));
-			chrome.storage.local.set({ "wish": res }, function() {
-				cb(res);
-			})
+
+			if (undefined === res.err) {
+				chrome.storage.local.set({ "wish": res }, function() {
+					cb(res);
+				})
+			}
 		})
 		.error(function(error) {
 			console.log(">> ERROR : " + JSON.stringify(error));
@@ -68,10 +71,12 @@ var _ux = {
 
 			var h = "<tr id='line_" + o._id + "'>"
 			+ "<td>" + o.market + "</td>"
+			//+ "<td><span class='label label-info'><i class='icon-picture icon-white'></i></span></td>"
 			+ "<td width='60'><img src='" + o.imageurl + "' width='60' height='60'></td>"
-			+ "<td><div class='action-detail' tid='" + o._id + "' data-title='설명' data-content='Hello, World'>" + o.title + "</div></td>"
+			//+ "<td><div class='action-detail' id='item_" + o._id + "' data-placement='top' data-title='설명' data-content='<img src=\"" + o.imageurl + "\" width=60 height=60>'>" + o.title + "</div></td>"
+			+ "<td><div class='action-detail' id='item_" + o._id + "'>" + o.title + "</div></td>"
 			+ "<td>" + o.price + "</td>"
-			+ "<td><i tid='" + o._id + "' class='icon-trash action-remove'></i></td></tr>";
+			+ "<td><span class='label label-important action-remove' tid='" + o._id + "'><i class='icon-trash icon-white'></i></span></td></tr>";
 
 			html += h;
 		}
@@ -79,20 +84,25 @@ var _ux = {
 		$("#wvlist").append(html);
 
 		$(".action-remove").click(function(e) {
-			_cx.remove(e.target.tid);
+			_cx.remove($(e.currentTarget).attr("tid"));
 		});
 
 		$(".action-detail").click(function(e) {
-			$(e.target).popover("toggle");
+			//$("#" + e.target.id).popover("toggle");
 		});
 	},
 	removeOne: function(line) {
 		$("#line_" + line).remove();
+		$("#notibar").append("<div class='alert alert-info'>"
+  		+ "<a class='close' data-dismiss='alert'>×</a>"
+  		+ "삭제되었습니다."
+			+ "</div>");
 	}
 };
 
 var _cx = {
 	remove: function(tid) {
+		console.log("try to delete :" + tid);
 		_mx.removeOne(tid, function(res) {
 			if (res.err) {
 				console.log("failed : try to delete item (" + tid + ")");
