@@ -22,24 +22,6 @@ var _px = {
 var _uv = {
 	render: function(d) {
 		$("#wvlist").html('');
-		$.ajax({
-			type: 'GET',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-			headers: {
-				'GX-AUTH': auth.getGX()
-			}
-		})
-		.done(function(res) {
-			console.log(">> DATA : " + JSON.stringify(res));
-			cb(res);
-		})
-		.error(function(error) {
-			console.log(">> ERROR : " + JSON.stringify(error));
-			cb({err:{msg: 'unknown error!'}});
-		})
-	}
-};
-
 		var html = "";
 		for (var i = 0; i < d.items.length; i++) {
 			var o = d.items[i];
@@ -64,9 +46,6 @@ $(document).ready(function() {
 			if (!res.err) {
 				_uv.render(res.data);
 			}
-		});
-	});
-});
 		});
 	});
 });
