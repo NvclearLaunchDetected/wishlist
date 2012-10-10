@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 exports.schema = mongoose.Schema({ 
-  market : String,                                // 마켓정보
+  market : Number,                                // 마켓정보
   title : String,                                 // 상품명
   price : String,                                 // 가격
   market_item_id : String,                        // 마켓별 상품 아이디

@@ -67,9 +67,9 @@ exports.getWishList = function(req, res){
             }
         };
 
-        var select = "market title price market_item_id comments url imageurl reg_date";
+        //var select = "market title price market_item_id comments url imageurl reg_date";
 
-        Item.find(query, select, range, itemFindCallback);
+        Item.find(query, null, range, itemFindCallback);
       }
       
     };
@@ -78,7 +78,7 @@ exports.getWishList = function(req, res){
 };
 
 exports.getUserList = function(req, res) {
-  var userFindCallback = function(err, user){
+  var userFindCallback = function(err, users){
     if (err){
       console.log(err);
       res.json({
@@ -89,9 +89,9 @@ exports.getUserList = function(req, res) {
       });
     }
     else {
-      res.json(user);
+      res.json(users);
     }
   }
 
-  User.findOne(userFindCallback);
+  User.find(userFindCallback);
 };

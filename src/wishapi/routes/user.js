@@ -9,6 +9,22 @@ var User = db.model('User', schema.user);
 exports.authorization = function(req, res){
 	var info = req.body;
 	
+	console.log(info);
+
+	if(info.email == '' ||  info.email == undefined
+		|| info.name == '' || info.name == undefined
+		|| info.token == '' || info.token == undefined
+		|| info.siteName == '' || info.siteName == undefined){
+		
+		res.json({
+			err : {
+				code : err_code.CAN_NOT_FIND_USER,
+				msg : err.message
+			}
+		});
+		return;
+	}
+
 	var userFindCallback = function(err, user){
 		if(err){
 			console.log(err);
@@ -24,14 +40,14 @@ exports.authorization = function(req, res){
 				user.name = info.name;
 				user.siteName = info.siteName;
 				user.token = info.token;
-				user.regDate = Date.now();
+				user.reg_date = Date.now();
 			}else{
 				user  = new User({
 					name : info.name,
 					email : info.email,
 					siteName : info.siteName,
 					token : info.token,
-					regDate : Date.now()
+					reg_date : Date.now()
 				});
 			}
 

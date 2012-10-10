@@ -32,13 +32,23 @@ exports.getWishList = function(req, res){
       });
     }
     else {
+      if(user == undefined || user._id == undefined){
+        res.json({
+          err : {
+            code : err_code.CAN_NOT_FIND_USER,
+            msg : '사용자 인증 정보가 일치 하지 않습니다.'
+          }
+        });
+        return;
+      }
+
       var market = req.query.market;
       var market_item_id = req.query.market_item_id;
       var page_size = req.query.ps;
       var page_no = req.params.page_no;
 
       // 조회 조건
-      var query = {};
+      var query = {user_id:user._id};
 
       if (market != undefined)
       {
@@ -130,6 +140,16 @@ exports.addItem = function(req, res) {
       });
     }
     else {
+      if(user == undefined || user._id == undefined){
+        res.json({
+          err : {
+            code : err_code.CAN_NOT_FIND_USER,
+            msg : '사용자 인증 정보가 일치 하지 않습니다.'
+          }
+        });
+        return;
+      }
+
       var info = req.body;
       //console.log(info);
       var item = new Item({
@@ -189,7 +209,17 @@ exports.removeItem = function(req, res) {
       });
     }
     else {
-      var item_id = mongoose.Types.ObjectId(req.params.item_id);
+      if(user == undefined || user._id == undefined){
+        res.json({
+          err : {
+            code : err_code.CAN_NOT_FIND_USER,
+            msg : '사용자 인증 정보가 일치 하지 않습니다.'
+          }
+        });
+        return;
+      }
+
+      var item_id = req.params.item_id;
 
       var itemRemoveCallback = function(err){
         if(err){
