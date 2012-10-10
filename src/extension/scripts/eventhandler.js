@@ -3,6 +3,7 @@ var url_parser = new URLParser();
 //tabs handler
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 	//„ìž¬ tabloadingurlë³€ê²˜ë©´ ¨í„´ ì¡°íšŒ
+	console.log('onUpdated')
 	if(!url_parser.isValid(tab.url)) {
 		chrome.browserAction.setBadgeText({text:'', tabId: tabId});
 		//set wish list as a default popup
@@ -22,6 +23,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 })
 
 chrome.tabs.onActivated.addListener(function(activeInfo){
+	console.log('onActivated')
   chrome.browserAction.getBadgeText({
     tabId: activeInfo.tabId
   }, function(badge){

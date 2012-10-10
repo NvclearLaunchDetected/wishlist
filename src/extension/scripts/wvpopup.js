@@ -1,8 +1,11 @@
-var auth = chrome.extension.getBackgroundPage().auth;
+var auth = new Auth();
 var _mx = {
 	pv: {},
-	init: function() {
-		_mx.pv.gx = auth.getGX();
+	init: function(cb) {
+		auth.getGX(function(gx){
+			_mx.pv.gx = gx;	
+			cb()
+		})
 	},
 	load: function(cb) {
 		chrome.storage.local.get("wish", function(items) {
@@ -19,22 +22,22 @@ var _mx = {
 		});
 	},
 	loadEx: function(cb) {
-		$.ajax({
-			type: 'GET',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-			headers: {
+			$.ajax({
+				type: 'GET',
+				url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+				headers: {
 				'GX-AUTH': _mx.pv.gx
-			}
-		})
-		.done(function(res) {
-			console.log(">> DATA : " + JSON.stringify(res));
+				}
+			})
+			.done(function(res) {
+				console.log(">> DATA : " + JSON.stringify(res));
 			chrome.storage.local.set({ "wish": res }, function() {
 				cb(res);
 			})
 		})
-		.error(function(error) {
-			console.log(">> ERROR : " + JSON.stringify(error));
-			cb({err:{msg: 'unknown error!'}});
+			.error(function(error) {
+				console.log(">> ERROR : " + JSON.stringify(error));
+				cb({err:{msg: 'unknown error!'}});
 		});
 	},
 	removeOne: function(tid, cb) {
@@ -44,7 +47,7 @@ var _mx = {
 			headers: {
 				'GX-AUTH': _mx.pv.gx
 			}
-		})
+			})
 		.done(function(res) {
 			_mx.loadEx(function() {
 				cb({});
@@ -107,12 +110,9 @@ var _cx = {
 $(document).ready(function() {
 	console.log(">> DEBUG : document.ready");
 	
-	auth.required(function() {
-		_mx.init();
-
+	_mx.init(function(){
 		_mx.load(function(res) {
 			if (res.err) return;
-
 			_ux.render(res);
 		});
 	});
