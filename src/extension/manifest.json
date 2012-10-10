@@ -40,6 +40,7 @@
 	],
 	"permissions": [
 		"tabs"
+		,"storage"
 		,"background"
 		,"https://accounts.google.com/o/oauth2/token"
     	,"https://www.googleapis.com/"

@@ -2,7 +2,7 @@ var url_parser = new URLParser();
 
 //tabs handler
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-	//�재 tabloadingurl변겘면 �턴 조회
+	//„ìž¬ tabloadingurlë³€ê²˜ë©´ ¨í„´ ì¡°íšŒ
 	if(!url_parser.isValid(tab.url)) {
 		chrome.browserAction.setBadgeText({text:'', tabId: tabId});
 		//set wish list as a default popup
@@ -13,7 +13,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 		return;
 	}
 
-	//�택tabId로정 �른 tab� �동�로 badge 변�
+	// íƒtabIdë¡œì • ¤ë¥¸ tab€ ë™¼ë¡œ badge ë³€ê²
 	chrome.browserAction.setBadgeText({text:'+', tabId: tabId});
 	 chrome.browserAction.setPopup({
 		 tabId: tab.tabId,
