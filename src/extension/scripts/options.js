@@ -1,8 +1,9 @@
 var auth = new Auth();
 function restore(){
-	auth.getAuthInfo(function(items){
-		$('#inputEmail').val(items.email);
-		$('#inputName').val(items.name);
+	auth.required(function(){
+		var authInfo = auth.getAuthInfo();
+		$('#inputEmail').val(authInfo.email);
+		$('#inputName').val(authInfo.name);		
 	})
 }
 
@@ -12,9 +13,8 @@ $(document).ready(function(){
 
 	//event handlers
 	$('#relogin').click(function(){
-		auth.clear(function(){
-			window.location = 'https://accounts.google.com/Logout?hl=ko&continue=http://www.google.co.kr/?wlo=true';
-		})		
+		auth.clear();
+		window.location = 'https://accounts.google.com/Logout?hl=ko&continue=http://www.google.co.kr/?wlo=true';
 	});
 
 	$('#save').click(function(){

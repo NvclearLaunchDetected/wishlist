@@ -8,42 +8,22 @@ function Auth(){
 	console.log('init auth');
 }
 
-Auth.prototype.clear = function(cb){
+Auth.prototype.clear = function(){
 	google.clearAccessToken()
-	chrome.storage.local.remove(['token', 'email', 'name'], cb);
+	google.clear('email');
+	google.clear('name');
 }
 
-Auth.prototype.getAuthInfo = function(cb){
-	var authorize = this.authorize;
-	chrome.storage.local.get(function(userdata){
-		if(!userdata || !userdata.token || !userdata.email){
-			//auth 태워야함
-			authorize(function(userinfo){
-				if(!userinfo){
-					cb('unknown error');
-					return;
-				}
-
-				if(userinfo.err){
-					cb(userinfo.err.msg);
-					return;
-				}
-
-				cb(userinfo);
-			})
-		}
-
-		cb(userdata);
-	})
+Auth.prototype.getAuthInfo = function(){
+	return google.get();
 }
 
-Auth.prototype.getGX = function(cb){
-	this.getAuthInfo(function(authInfo){
-		cb('ga=' + authInfo.email + '&token=' + authInfo.token);
-	})
+Auth.prototype.getGX = function(){
+	var authInfo = this.getAuthInfo();
+	return 'ga=' + authInfo.email + '&token=' + authInfo.accessToken;
 }
 
-Auth.prototype.authorize = function(cb){
+Auth.prototype.required = function(cb){
 	console.log('google:' + JSON.stringify(google));
 	
 	function getGoogleUserinfo(token, cb) {
@@ -72,16 +52,10 @@ Auth.prototype.authorize = function(cb){
 		.done(cb);
 	}
 
-	function saveUserInfo(t, u, cb){
-		var info = {
-			token: t,
-			email: u.email,
-			name: u.name
-		};
-
-		chrome.storage.local.set(info, function(){
-			cb(info);
-		})
+	function saveUserInfo(u, cb){
+		google.set('email', u.email);
+		google.set('name', u.name);
+		cb({token: google.getAccessToken(), email: google.get('email'), name: google.get('name')});
 	}
 
 	google.authorize(function(){
@@ -104,7 +78,7 @@ Auth.prototype.authorize = function(cb){
 				}
 
 				//완죤 다 성공.
-				saveUserInfo(accessToken, info, cb);
+				saveUserInfo(info, cb);
 			})
 		});
 	});

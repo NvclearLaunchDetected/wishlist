@@ -1,11 +1,8 @@
 var auth = new Auth();
 var _mx = {
 	pv: {},
-	init: function(cb) {
-		auth.getGX(function(gx){
-			_mx.pv.gx = gx;	
-			cb()
-		})
+	init: function() {
+		_mx.pv.gx = auth.getGX();
 	},
 	load: function(cb) {
 		chrome.storage.local.get("wish", function(items) {
@@ -109,8 +106,8 @@ var _cx = {
 
 $(document).ready(function() {
 	console.log(">> DEBUG : document.ready");
-	
-	_mx.init(function(){
+	auth.required(function(){
+		_mx.init();
 		_mx.load(function(res) {
 			if (res.err) return;
 			_ux.render(res);
