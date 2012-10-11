@@ -6,15 +6,6 @@ function restore(){
 		$('#inputEmail').val(authInfo.email);
 		$('#inputName').val(authInfo.name);		
 	})
-
-	chrome.storage.local.get('settings', function(data){
-		if(data.settings.useBanner) $('#useBanner').attr('checked','checked');
-	})
-}
-
-function save(){
-	chrome.storage.local.remove('settings');
-	chrome.storage.local.set({ settings: $('#settings').serializeJSON()});
 }
 
 $(document).ready(function(){
@@ -26,7 +17,5 @@ $(document).ready(function(){
 		auth.clear();
 		window.location = 'https://accounts.google.com/Logout?hl=ko&continue=http://www.google.co.kr/?wlo=true';
 	});
-
-	$('#save').click(save);
 })
 
