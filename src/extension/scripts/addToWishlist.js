@@ -1,6 +1,4 @@
 function setAddMode(){
-	//배너도 여기에
-
 	chrome.extension.sendMessage(null, {msg: 'setAddMode'}, function(res){
 		console.log(res.msg);
 	});
@@ -20,6 +18,8 @@ function ensureNotExists(mi, cb){
 		cb();		
 	});
 }
+
+
 
 $(document).ready(function(){
 	var marketInfo = urlparser.parse(window.location.href);
