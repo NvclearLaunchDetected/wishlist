@@ -16,9 +16,7 @@ function setAddMode(tabId){
 		popup: 'awpopup.html'
 	});
 
-	chrome.storage.local.get('settings', function(data){
-		if(data.settings.useBanner) popNotification();
-	})
+	popNotification();
 }
 
 function popNotification(){
