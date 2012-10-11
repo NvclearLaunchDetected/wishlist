@@ -28,6 +28,13 @@ function popNotification(){
 	
 	// Then show the notification.
 	notification.show();
+	notification.onclose = function(){
+		console.log('closing! notification');
+	}
+
+	setTimeout(function(){
+	 	notification.close();
+	}, 2000)
 }
 
 function isExist(market_code, itemno, cb){
