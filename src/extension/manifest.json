@@ -13,7 +13,6 @@
 			,"scripts/auth.js"
 			,"scripts/lifetime.js"
 			,"scripts/eventhandler.js"
-			,"scripts/contextmenu.js"
 		],
 		"persistent": false
 	},
