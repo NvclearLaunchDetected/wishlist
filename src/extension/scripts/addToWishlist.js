@@ -1,3 +1,5 @@
+var urlparser = new URLParser();
+
 function setAddMode(){
 	chrome.extension.sendMessage(null, {msg: 'setAddMode'}, function(res){
 		console.log(res.msg);
