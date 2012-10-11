@@ -10,8 +10,8 @@ var Item = db.model('Item', schema.item),
 exports.getWishList = function(req, res){
     var market = req.query.market;
     var market_item_id = req.query.market_item_id;
-    var page_size = req.query.ps;
-    var page_no = req.params.page_no;
+    var page_size = parseInt(req.query.ps, 10);
+      var page_no = parseInt(req.params.page_no, 10);
 
     // 조회 조건
     var query = {};
@@ -37,10 +37,10 @@ exports.getWishList = function(req, res){
         // range 조건
         var range = {sort:{reg_date:-1}};
 
-        page_size = (page_size == undefined)?10:page_size;
+        page_size = (page_size == undefined || page_size == 0 || isNaN(page_size))?10:page_size;
         range.limit = page_size;
-
-        if(page_no != undefined){
+        
+        if(page_no != undefined && !isNaN(page_no)){
           range.skip = page_no * page_size;
         }
         else {
