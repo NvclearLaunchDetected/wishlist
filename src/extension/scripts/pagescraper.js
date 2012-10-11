@@ -504,12 +504,12 @@ PageScraper.prototype.getTitle = function() {
 var scraper = new PageScraper();
 var urlparser = new URLParser();
 function getProductInfo(){
-  var marketInfo = urlparser.parse(document.location.href) || {} ;
+  var marketInfo = urlparser.parse(window.location.href) || {} ;
   return { title: scraper.getTitle(), 
     price: scraper.getPrice(), 
     imageList: scraper.getGenericImageData(),
     market: Markets.getCode(marketInfo.market),
     market_item_id: marketInfo.itemno,
-    url: document.location.href
+    url: window.location.href
   };
 }

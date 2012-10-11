@@ -1,6 +1,6 @@
 var url_parser = new URLParser();
 
-function setDefault(tabId){
+function setDefaultMode(tabId){
 	chrome.browserAction.setBadgeText({text:'', tabId: tabId});
 	//set wish list as a default popup
 	chrome.browserAction.setPopup({
@@ -17,15 +17,18 @@ function setAddMode(tabId){
 	});
 }
 
-//tabs handler
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-	if(!url_parser.isValid(tab.url)) {
-		setDefault(tabId);
-		return;
-	}
-
-	setAddMode(tabId);
-})
+function isExist(market_code, itemno, cb){
+	var auth = new Auth();
+	$.ajax({
+		type: 'GET',
+		url: 'http://wishapi-auth.cloudfoundry.com/wishlist?market=' + market_code + '&market_item_id=' + itemno,
+		headers: {
+			'GX-AUTH': auth.getGX()
+		}
+	}).done(cb).error(function(error){
+		cb({err:{msg: 'unknown error!'}});
+	})
+}
 
 chrome.extension.onMessage.addListener(function(info, sender, cb){
 	if ('getProductInfo' == info.msg){
@@ -34,6 +37,43 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 		})
 
 		return true;
+	}
+
+	if ('isExist' == info.msg){
+		isExist(info.market_code, info.itemno, function(res){
+			if(!res) {
+				cb({err:{msg: 'unknown error'}});
+				return;
+			}
+
+			if(res.err){
+				cb(res);
+				return;
+			}
+
+			if(res.items && res.items.length){
+				cb({exist: true});
+				return;
+			}
+
+			cb({exist: false});
+		});
+
+		return true;
+	}
+
+	if ('setDefaultMode' == info.msg){
+		var tabId = info.tabId || sender.tab.id;
+
+		setDefaultMode(tabId);
+		cb({msg: 'set browserAction as default mode'});
+	}
+
+	if ('setAddMode' == info.msg){
+		var tabId = info.tabId || sender.tab.id;
+
+		setAddMode(tabId);
+		cb({msg: 'set browserAction as add mode'});	
 	}
 
 	if ('getListPopupHtml' == info.msg) {

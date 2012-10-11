@@ -2,6 +2,15 @@ var url_parser = new URLParser();
 var scrapInfo = {};
 var selectedImageIndex = 0;
 
+function setDefaultMode(){
+	console.log('on popup')
+	chrome.tabs.getSelected(function(tab){
+		console.log(tab);
+		chrome.extension.sendMessage(null, {msg: 'setDefaultMode', tabId: tab.id}, function(res){
+			console.log(res.msg);
+		});
+	})
+}
 
 $(document).ready(function(){
 	chrome.extension.sendMessage(null, {msg: 'getProductInfo'}, function(info){
@@ -60,6 +69,7 @@ $(document).ready(function(){
 			else{
 				$('#addToWishlist').button('complete');
 				$('#alertdiv').successAlert('Added!');
+				setDefaultMode();
 			}
 		})
 	})
@@ -67,19 +77,16 @@ $(document).ready(function(){
 
 function addToWishlist(data, cb){
 	var auth = new Auth();
-
-	auth.getGX(function(gx){
-		$.ajax({
-			type: 'POST',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-			data: data,
-				contentType: 'application/x-www-form-urlencoded',
-			headers: {
-				'GX-AUTH': gx
-			}
-		}).done(cb).error(function(error){
-			cb({err:{msg: 'unknown error!'}});
-		})
-	});
+	$.ajax({
+		type: 'POST',
+		url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+		data: data,
+			contentType: 'application/x-www-form-urlencoded',
+		headers: {
+			'GX-AUTH': auth.getGX()
+		}
+	}).done(cb).error(function(error){
+		cb({err:{msg: 'unknown error!'}});
+	})
 }
 

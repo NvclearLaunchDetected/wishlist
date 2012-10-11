@@ -49,6 +49,7 @@
 	    		,"scripts/urlparser.js"
 	    		,"scripts/markets.js"
 	    		,"scripts/pagescraper.js"
+	    		,"scripts/addToWishlist.js"
 	    	]
 	    }
 	],
