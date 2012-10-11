@@ -27,9 +27,12 @@ var _mx = {
 		})
 		.done(function(res) {
 			console.log(">> DATA : " + JSON.stringify(res));
-			chrome.storage.local.set({ "wish": res }, function() {
-				cb(res);
-			})
+
+			if (undefined === res.err && res.t && 0 < res.t) {
+				chrome.storage.local.set({ "wish": res }, function() {
+					cb(res);
+				})
+			}
 		})
 		.error(function(error) {
 			console.log(">> ERROR : " + JSON.stringify(error));
@@ -82,11 +85,11 @@ var _ux = {
 
 			var h = "<tr id='line_" + o._id + "'>"
 			+ "<td>" + o.market + "</td>"
+			//+ "<td><span class='label label-info'><i class='icon-picture icon-white'></i></span></td>"
 			+ "<td width='60'><img src='" + o.imageurl + "' width='60' height='60'></td>"
-			//+ "<td><div class='action-detail' mkt='" + o.market + "' mid='" + o.market_item_id +"' tid='" + o._id + "' data-title='Comments' data-content='" + o.comments + "'>" + o.title + "</div></td>"
-			+ "<td><div class='action-detail' mkt='" + o.market + "' mid='" + o.market_item_id +"' tid='" + o._id + "' data-placement='top' data-content='" + o.comments + "'>" + o.title + "</div></td>"
+			+ "<td><div class='action-detail' tid='" + o._id + "' data-title='설명' data-content='Hello, World'>" + o.title + "</div></td>"
 			+ "<td>" + o.price + "</td>"
-			+ "<td><span class='label label-warning action-remove' tid='" + o._id + "'><i class='icon-trash icon-white'></i></span></td></tr>";
+			+ "<td><i tid='" + o._id + "' class='icon-trash action-remove'></i></td></tr>";
 
 			html += h;
 		}
@@ -98,7 +101,7 @@ var _ux = {
 		});
 
 		$(".action-detail").click(function(e) {
-			var eo = $(e.currentTarget);
+			$(e.target).popover("toggle");
 
 			_cx.catalog({ eid: eo.attr("id"), mkt: eo.attr("mkt"), no: eo.attr("mid") });
 		});
@@ -113,14 +116,13 @@ var _ux = {
 	removeOne: function(line) {
 		$("#line_" + line).remove();
 	},
-	renderCatalog: function(pos, data) {
-		// render... items from catalog
-		console.log("draw at " + pos);
+			+ "</div>");
 	}
 };
 
 var _cx = {
 	remove: function(tid) {
+		console.log("try to delete :" + tid);
 		_mx.removeOne(tid, function(res) {
 			if (res.err) {
 				console.log("failed : try to delete item (" + tid + ")");
