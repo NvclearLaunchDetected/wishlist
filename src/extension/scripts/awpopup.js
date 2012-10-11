@@ -12,6 +12,24 @@ function setDefaultMode(){
 	})
 }
 
+function popNotification(msg){
+	var notification = webkitNotifications.createNotification(
+	  'img/myfav_i19.png',  // icon url - can be relative
+	  '관심상품 추가',  // notification title
+	  msg  // notification body text
+	);
+	
+	// Then show the notification.
+	notification.show();
+	notification.onclose = function(){
+		console.log('closing! notification');
+	}
+
+	setTimeout(function(){
+	 	notification.close();
+	}, 2000)
+}
+
 $(document).ready(function(){
 	chrome.extension.sendMessage(null, {msg: 'getProductInfo'}, function(info){
 		if(!info) return;
@@ -59,17 +77,19 @@ $(document).ready(function(){
 		form_data.market = scrapInfo.market;
 		form_data.market_item_id = scrapInfo.market_item_id;
 		form_data.url = scrapInfo.url;
-
+		console.log('scarpinfo: ')
+		console.log(scrapInfo);
 		$('#addToWishlist').button('loading');
 		addToWishlist(form_data, function(res){
 			if(res.err){
 				$('#addToWishlist').button('reset');
-				$('#alertdiv').errorAlert(res.err.msg);
+				popNotification(res.err.msg);
 			}
 			else{
 				$('#addToWishlist').button('complete');
-				$('#alertdiv').successAlert('Added!');
 				setDefaultMode();
+				popNotification('[' + Markets.getMarket(form_data.market) +'] ' + form_data.market_item_id + ' 이(가) 관심상품으로 추가되었습니다.')
+				window.close();
 			}
 		})
 	})

@@ -11,13 +11,15 @@ var Markets = {
 	},
 
 	getCode: function(market){
-		if(!market)  return codes['unknown'];
+		if(!market)  return this.codes['unknown'];
 
 		return this.codes[market.toLowerCase()] || this.codes['unknown'];
+	},
+
+	getMarket: function(code){
+	 	for(var m in this.codes){
+	 		if(code == this.codes[m]) return m;
+	 	}		
+	 	return 'unknown';
 	}
-
-	//not needed yet.
-	// getMarket: function(code){
-
-	// }
 }
