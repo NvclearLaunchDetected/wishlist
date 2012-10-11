@@ -101,9 +101,9 @@ var _ux = {
 		});
 
 		$(".action-detail").click(function(e) {
-			$(e.target).popover("toggle");
+			$(e.currentTarget).popover("toggle");
 
-			_cx.catalog({ eid: eo.attr("id"), mkt: eo.attr("mkt"), no: eo.attr("mid") });
+			_cx.catalog({ eid: eo.attr("tid"), mkt: eo.attr("mkt"), no: eo.attr("mid") });
 		});
 
 		$(".action-detail").hover(function(e) {
@@ -116,7 +116,11 @@ var _ux = {
 	removeOne: function(line) {
 		$("#line_" + line).remove();
 	},
-			+ "</div>");
+	renderCatalog: function(tid, data) {
+		// render ... items
+		console.log("draw at " + pos);
+
+		
 	}
 };
 
