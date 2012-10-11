@@ -24,7 +24,10 @@ Auth.prototype.getGX = function(){
 }
 
 Auth.prototype.required = function(cb){
-	console.log('google:' + JSON.stringify(google));
+	if(google.hasAccessToken() && !google.isAccessTokenExpired()){
+		cb();
+		return;
+	}
 	
 	function getGoogleUserinfo(token, cb) {
 		console.log('calling userinfo ' +token);
