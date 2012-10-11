@@ -1,3 +1,4 @@
+var urlparser = new URLParser();
 var maxRequestLength = 4096;
 
 var PageScraper = function() {
@@ -14,6 +15,25 @@ PageScraper.prototype.getGenericItemData = function(){
 };
 
 PageScraper.prototype.getPrice = function() {
+    var info = urlparser.parse(window.location.href);
+    if(info && info.market == 'auction'){
+      var pricereg = /.*\('SellPrice',(.*)\..*/;
+      price_tokens = pricereg.exec($('#SellPrice').attr('flashvars'));
+      if(price_tokens.length > 1) return price_tokens[1];
+    }
+
+    if(info && info.market == 'gmarket'){
+      var dc_price_elm = $('#dc_price');
+      if(dc_price_elm && dc_price_elm.length){
+        var dc_price = dc_price_elm.text();
+        dc_price = dc_price.replace(',','');
+        dc_price = dc_price.replace('원','');
+        return dc_price;
+      }
+      
+      if(price_tokens.length > 1) return price_tokens[1];
+    }
+
     var startTime = new Date().getTime();
     var nodes = [];
     var nonZeroRe = /[1-9]/;
@@ -432,6 +452,20 @@ PageScraper.prototype.getGenericImageData = function(includeSrc) {
           return PageScraper.prototype.sortImage(a, b);
       };
       imageArray.sort(sortFunc);
+
+      var info = urlparser.parse(window.location.href);
+      if(info.market == 'gmarket'){
+        if(!$('#GoddsImageElem').length) return imageArray;
+
+        imageArray[0] = { src: $('#GoddsImageElem').attr('src')}
+      }
+
+      if(info.market == 'auction'){
+        if(!$('#ucImageNavigator_himgBig1').length) return imageArray;
+
+        imageArray[0] = { src: $('#ucImageNavigator_himgBig1').attr('src')}
+      }
+
       return imageArray;
 };
 
@@ -501,9 +535,12 @@ PageScraper.prototype.getTitle = function() {
   return title;
 };
 
-var scraper = new PageScraper();
-var urlparser = new URLParser();
+
+
+
+
 function getProductInfo(){
+  var scraper = new PageScraper();
   var marketInfo = urlparser.parse(window.location.href) || {} ;
   return { title: scraper.getTitle(), 
     price: scraper.getPrice(), 
