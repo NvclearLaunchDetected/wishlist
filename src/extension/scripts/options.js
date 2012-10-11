@@ -1,4 +1,5 @@
 var auth = new Auth();
+
 function restore(){
 	auth.required(function(){
 		var authInfo = auth.getAuthInfo();

@@ -15,6 +15,21 @@ function setAddMode(tabId){
 		tabId: tabId,
 		popup: 'awpopup.html'
 	});
+
+	chrome.storage.local.get('settings', function(data){
+		if(data.settings.useBanner) popNotification();
+	})
+}
+
+function popNotification(){
+	var notification = webkitNotifications.createNotification(
+	  'img/myfav_i19.png',  // icon url - can be relative
+	  '관심상품 추가',  // notification title
+	  '이 상품은 관심상품으로 추가할 수 있삼.'  // notification body text
+	);
+	
+	// Then show the notification.
+	notification.show();
 }
 
 function isExist(market_code, itemno, cb){

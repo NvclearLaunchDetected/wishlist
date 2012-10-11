@@ -58,6 +58,7 @@
 		,"storage"
 		,"background"
 		,"storage"
+		,"notifications"
 		,"https://accounts.google.com/o/oauth2/token"
     	,"https://www.googleapis.com/"
     	,"*://wishapi-auth.cloudfoundry.com/*"
@@ -68,7 +69,10 @@
     	,"*://*.cjmall.com/*"
     	,"*://*.lotte.com/*"
     	,"*://*.lotteimall.com/*"
-	]	
+	],
+	"web_accessible_resources": [
+		"img/myfav_i19.png"
+	]
 
 	//,"default_locale" : "en"
 }
