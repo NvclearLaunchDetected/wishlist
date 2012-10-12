@@ -12,22 +12,8 @@ function setDefaultMode(){
 	})
 }
 
-function popNotification(msg){
-	var notification = webkitNotifications.createNotification(
-	  'img/myfav_i19.png',  // icon url - can be relative
-	  '관심상품 추가',  // notification title
-	  msg  // notification body text
-	);
-	
-	// Then show the notification.
-	notification.show();
-	notification.onclose = function(){
-		console.log('closing! notification');
-	}
-
-	setTimeout(function(){
-	 	notification.close();
-	}, 2000)
+function popNotification(body){
+	chrome.extension.sendMessage(null, {msg: 'popNotification', title: '관심상품 추가', body: body})
 }
 
 $(document).ready(function(){
@@ -88,7 +74,7 @@ $(document).ready(function(){
 			else{
 				$('#addToWishlist').button('complete');
 				setDefaultMode();
-				popNotification('[' + Markets.getMarket(form_data.market) +'] ' + form_data.market_item_id + ' 이(가) 관심상품으로 추가되었습니다.')
+				popNotification('[' + Markets.getMarket(form_data.market) +'] ' + form_data.market_item_id + ' 이(가) 관심상품으로 추가되었습니다.');
 				window.close();
 			}
 		})
