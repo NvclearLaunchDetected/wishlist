@@ -10,33 +10,11 @@ var _mx = {
 				console.log("data loaded from local storage");
 				cb(items.wish);
 			} else {
-				_mx.loadEx(function(res) {
+				chrome.extension.sendMessage(null, {msg: 'forceReloadList'}, function(res) {
 					console.log("data loaded from remote svc");
 					cb(res);
 				});
 			}
-		});
-	},
-	loadEx: function(cb) {
-		$.ajax({
-			type: 'GET',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-			headers: {
-			'GX-AUTH': _mx.pv.gx
-			}
-		})
-		.done(function(res) {
-			console.log(">> DATA : " + JSON.stringify(res));
-
-			if (undefined === res.err && res.t && 0 < res.t) {
-				chrome.storage.local.set({ "wish": res }, function() {
-					cb(res);
-				})
-			}
-		})
-		.error(function(error) {
-			console.log(">> ERROR : " + JSON.stringify(error));
-			cb({err:{msg: 'unknown error!'}});
 		});
 	},
 	removeOne: function(tid, cb) {
@@ -61,9 +39,11 @@ var _mx = {
 		$.ajax({
 			type: 'GET',
 			url: "http://devprism.about.co.kr/catalog.aspx?mall=" + mkt + "&no=" + no,
+			dataType: "text"
 		})
 		.done(function(res) {
-			console.log(">> DATA : " + JSON.stringify(res));
+			//console.log(">> DATA : " + JSON.stringify(res));
+			console.log(">> DATA : " + res);
 			cb(res);
 		})
 		.error(function(error) {
@@ -84,12 +64,12 @@ var _ux = {
 			var o = d.items[i];
 
 			var h = "<tr id='line_" + o._id + "'>"
-			+ "<td>" + o.market + "</td>"
+			+ "<td>" + Markets.getMarket(o.market) + "</td>"
 			//+ "<td><span class='label label-info'><i class='icon-picture icon-white'></i></span></td>"
 			+ "<td width='60'><img src='" + o.imageurl + "' width='60' height='60'></td>"
-			+ "<td><div class='action-detail' tid='" + o._id + "' data-title='설명' data-content='Hello, World'>" + o.title + "</div></td>"
-			+ "<td>" + o.price + "</td>"
-			+ "<td><i tid='" + o._id + "' class='icon-trash action-remove'></i></td></tr>";
+			+ "<td><div class='action-detail' tid='" + o._id + "' data-placement='top' data-content='" + o.comments + "'>" + o.title + "</div></td>"
+			+ "<td><span>" + o.price + "</span><br><span class='label label-info action-pcs' idx='" + i + "'>가격비교</span></td>"
+			+ "<td><span class='label label-warning action-remove' tid='" + o._id + "'><i class='icon-trash icon-white'></i></span></td></tr>";
 
 			html += h;
 		}
@@ -101,9 +81,24 @@ var _ux = {
 		});
 
 		$(".action-detail").click(function(e) {
-			$(e.currentTarget).popover("toggle");
-
+			var eo = $(e.currentTarget);
 			_cx.catalog({ eid: eo.attr("tid"), mkt: eo.attr("mkt"), no: eo.attr("mid") });
+		});
+
+		$(".action-pcs").click(function(e) {
+			var eo = $(e.currentTarget);
+			var o = _mx.pv.data.items[eo.attr("idx")]
+
+			_mx.loadCatalog( o.market, o.market_item_id, function(data) {
+				var m = data.match(/cid:(\d*)/);
+
+				if (m)
+					chrome.tabs.create({ url: "http://pcp.about.co.kr/ProductInfo.aspx?catalogIDs=" + m[1] + "&Tab=tab2" });
+			})
+
+			//chrome.tabs.create({ url: "http://pcp.about.co.kr/ProductInfo.aspx?catalogIDs=" + eo.attr("tid")+ "&Tab=tab2" });
+			
+			//chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(_mx.pv.data.items[eo.attr("idx")].title)});
 		});
 
 		$(".action-detail").hover(function(e) {
@@ -118,9 +113,7 @@ var _ux = {
 	},
 	renderCatalog: function(tid, data) {
 		// render ... items
-		console.log("draw at " + pos);
-
-		
+		console.log("draw at " + JSON.stringify(data));
 	}
 };
 
@@ -148,7 +141,8 @@ $(document).ready(function() {
 		_mx.init();
 		_mx.load(function(res) {
 			if (res.err) return;
-			_ux.render(res);
+				_mx.pv.data = res;
+				_ux.render(res);
 		});
 	});
 });
