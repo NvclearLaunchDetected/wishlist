@@ -8,11 +8,6 @@ function restore(){
 	})
 
 	Settings.required(function(settings){
-		if(!settings){
-			$('#closeNotiSec').val(DEFAULT_NOTIFICATION_CLOSEIN);
-			return;
-		}
-
 		$('#closeNotiSec').val(settings.closeNotiSec);
 		if(settings.notUseNoti)	$('#notUseNoti').attr('checked','checked');
 	});
