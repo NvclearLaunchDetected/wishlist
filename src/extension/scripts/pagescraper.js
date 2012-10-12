@@ -110,8 +110,8 @@ PageScraper.prototype.getTitle = function() {
   //사이트별 title 패턴...
   var info = urlparser.parse(window.location.href);
   if(info && info.market == 'auction'){
-    if($('#hdivItemTitle') && $('hdivItemTitle').length && $('hdivItemTitle').text()) 
-      return $('hdivItemTitle').text();
+    if($('#hdivItemTitle') && $('#hdivItemTitle').text()) 
+      return $('#hdivItemTitle').text();
   }
 
   if(info && info.market == 'gmarket'){
