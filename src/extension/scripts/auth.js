@@ -24,7 +24,9 @@ Auth.prototype.getGX = function(){
 }
 
 Auth.prototype.required = function(cb){
-	if(google.hasAccessToken() && !google.isAccessTokenExpired()){
+	console.log('auth required')
+	if(google.getAccessToken() && !google.isAccessTokenExpired()){
+		console.log('has valid token.');
 		cb();
 		return;
 	}
@@ -42,6 +44,7 @@ Auth.prototype.required = function(cb){
 	}
 	
 	function addAuthorizedUser(token, info, cb) {
+		console.log('set new auth token.')
 		$.ajax({
 			type: 'post',
 			url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
@@ -63,6 +66,7 @@ Auth.prototype.required = function(cb){
 
 	google.authorize(function(){
 	 	if(!google.getAccessToken()){
+	 		console.error("couldn't get the access token.");
 	 		cb({err: {msg: "couldn't get the access token."}});
 	 		return;
 	 	}
@@ -70,12 +74,14 @@ Auth.prototype.required = function(cb){
 	 	var accessToken = google.getAccessToken();
  		getGoogleUserinfo(accessToken, function(info){
 			if(!info){
+				console.error("couldn't get the user info.");
 				cb({err: {msg: "couldn't get the user info."}});
 				return;
 			}
 
 			addAuthorizedUser(accessToken, info, function(res){
 				if(res.err){
+					console.error(res);
 					cb(res);
 					return;
 				}

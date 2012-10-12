@@ -26,6 +26,10 @@ function priceFormat(n) {
 	return n;
 }
 
+function convertPriceToint(val){
+	return parseInt(val.replace(',',''),10);
+}
+
 function saveInputCache(){
 	inputCache.title = $('#inputTitle').val();
 	inputCache.price = $('#inputPrice').val();
@@ -142,7 +146,9 @@ $(document).ready(function(){
 		}
 
 		var that = this;
+		
 		var form_data = $('form').serializeJSON();
+		form_data.price = convertPriceToint($('#inputPrice').val());
 		form_data.market = scrapInfo.market;
 		form_data.market_item_id = scrapInfo.market_item_id;
 		form_data.url = scrapInfo.url;
