@@ -16,6 +16,15 @@ function popNotification(body){
 	chrome.extension.sendMessage(null, {msg: 'popNotification', title: '관심상품 추가', body: body})
 }
 
+function priceFormat(n) {
+	var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
+	n += '';                          // 숫자를 문자열로 변환
+
+	while (reg.test(n))
+		n = n.replace(reg, '$1' + ',' + '$2');
+	return n;
+}
+
 $(document).ready(function(){
 	chrome.extension.sendMessage(null, {msg: 'getProductInfo'}, function(info){
 		if(!info) return;
@@ -23,7 +32,7 @@ $(document).ready(function(){
 
 		scrapInfo = info;
 		if(scrapInfo.title) $('#inputTitle').val(scrapInfo.title);
-		if(scrapInfo.price) $('#inputPrice').val(scrapInfo.price);
+		if(scrapInfo.price) $('#inputPrice').val(priceFormat(scrapInfo.price));
 		if(scrapInfo.imageList && scrapInfo.imageList.length) {
 			$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
 			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
@@ -49,6 +58,16 @@ $(document).ready(function(){
 			$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
 			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
 			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
+		}
+	});
+
+	$('#inputPrice').css("imeMode","disabled").bind("keypress", function(e){
+		if((e.keyCode < 8 || e.keyCode > 9)&&(e.keyCode < 48 || e.keyCode>57)){
+			return false;
+		}
+	}).keyup(function(){
+		if($(this).val()!=null && $(this).val()!=''){
+			$(this).val(priceFormat($(this).val().replace(/[^0-9]/g, '')));
 		}
 	});
 
