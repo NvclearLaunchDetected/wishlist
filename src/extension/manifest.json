@@ -12,6 +12,7 @@
 			,"scripts/urlparser.js"
 			,"scripts/auth.js"
 			,"scripts/lifetime.js"
+			,"scripts/settings.js"
 			,"scripts/eventhandler.js"
 		],
 		"persistent": false

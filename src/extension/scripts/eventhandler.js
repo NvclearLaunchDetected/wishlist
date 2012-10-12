@@ -20,21 +20,25 @@ function setAddMode(tabId){
 }
 
 function popNotification(title, body){
-	var notification = webkitNotifications.createNotification(
-	  'img/myfav_i19.png',  // icon url - can be relative
-	  title,  // notification title
-	  body  // notification body text
-	);
-	
-	// Then show the notification.
-	notification.show();
-	notification.onclose = function(){
-		console.log('closing! notification');
-	}
+	Settings.required(function(settings){
+		if(settings.notUseNoti) return;
 
-	setTimeout(function(){
-	 	notification.close();
-	}, 2000)
+		var notification = webkitNotifications.createNotification(
+		  'img/myfav_i19.png',  // icon url - can be relative
+		  title,  // notification title
+		  body  // notification body text
+		);
+		
+		// Then show the notification.
+		notification.show();
+		notification.onclose = function(){
+			console.log('closing! notification');
+		}
+
+		setTimeout(function(){
+		 	notification.close();
+		}, settings.closeNotiSec * 1000)
+	})
 }
 
 function isExist(market_code, itemno, cb){
