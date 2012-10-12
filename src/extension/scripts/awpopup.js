@@ -1,6 +1,7 @@
 var url_parser = new URLParser();
 var scrapInfo = {};
 var selectedImageIndex = 0;
+var inputCache;
 
 function setDefaultMode(){
 	console.log('on popup')
@@ -25,20 +26,71 @@ function priceFormat(n) {
 	return n;
 }
 
+function saveInputCache(){
+	inputCache.title = $('#inputTitle').val();
+	inputCache.price = $('#inputPrice').val();
+	inputCache.comments = $('#inputComments').val();
+	inputCache.imgNo = selectedImageIndex;
+
+	chrome.storage.local.set({"inputCache":inputCache}, null);
+	console.log("Save inputCache");
+	console.log(inputCache);
+}
+
 $(document).ready(function(){
 	chrome.extension.sendMessage(null, {msg: 'getProductInfo'}, function(info){
 		if(!info) return;
-		console.log(info);
+		//console.log(info);
 
 		scrapInfo = info;
-		if(scrapInfo.title) $('#inputTitle').val(scrapInfo.title);
-		if(scrapInfo.price) $('#inputPrice').val(priceFormat(scrapInfo.price));
+
+		chrome.storage.local.get("inputCache", function(data){
+			inputCache = data.inputCache;
+			console.log("Load inputCache");
+			console.log(inputCache);
+			if(inputCache && inputCache.url != undefined && inputCache.url != '' && inputCache.url == scrapInfo.url){
+				if(inputCache.title != undefined && inputCache.title != ''){
+					$('#inputTitle').val(inputCache.title);
+				}else{
+					if(scrapInfo.title) $('#inputTitle').val(scrapInfo.title);
+				}
+
+				if(inputCache.price != undefined && inputCache.price != ''){
+					$('#inputPrice').val(inputCache.price);
+				}else{
+					if(scrapInfo.title) $('#inputPrice').val(priceFormat(scrapInfo.price));
+				}
+
+				if(inputCache.comments != undefined && inputCache.comments != ''){
+					$('#inputComments').val(inputCache.comments);
+				}
+
+				if(inputCache.imgNo != undefined){
+					selectedImageIndex = inputCache.imgNo;
+
+					if(scrapInfo.imageList && scrapInfo.imageList.length) {
+						if(scrapInfo.imageList.length <= selectedImageIndex)selectedImageIndex = 0;
+						$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
+						$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
+						$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
+					}
+				}
+			}else {
+				inputCache = {};
+				inputCache.url = scrapInfo.url;
+
+				if(scrapInfo.title) $('#inputTitle').val(scrapInfo.title);
+				if(scrapInfo.price) $('#inputPrice').val(priceFormat(scrapInfo.price));
+			}
+		});
+
 		if(scrapInfo.imageList && scrapInfo.imageList.length) {
 			$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
 			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
 			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
 		}
 	});
+
 
 	$('#prevImage').click(function(){
 		if(selectedImageIndex > 0) selectedImageIndex--;
@@ -48,7 +100,6 @@ $(document).ready(function(){
 			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
 			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
 		}
-
 	})
 
 	$('#nextImage').click(function(){
@@ -68,7 +119,20 @@ $(document).ready(function(){
 	}).keyup(function(){
 		if($(this).val()!=null && $(this).val()!=''){
 			$(this).val(priceFormat($(this).val().replace(/[^0-9]/g, '')));
+			chrome.storage.local.set(inputCache);
 		}
+	});
+
+	$('#inputTitle').focusout(function(){
+		saveInputCache();
+	});
+
+	$('#inputPrice').focusout(function(){
+		saveInputCache();
+	});
+
+	$('#inputComments').focusout(function(){
+		saveInputCache();
 	});
 
 	$('#addToWishlist').click(function(){
@@ -94,6 +158,7 @@ $(document).ready(function(){
 				$('#addToWishlist').button('complete');
 				setDefaultMode();
 				popNotification('[' + Markets.getMarket(form_data.market) +'] ' + form_data.market_item_id + ' 이(가) 관심상품으로 추가되었습니다.');
+				chrome.storage.local.remove("inputCache");
 				window.close();
 			}
 		})
