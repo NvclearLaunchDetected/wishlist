@@ -7,10 +7,11 @@
 		<script src="libs/jquery.formserialize.js"></script>
 		<script src="oauth2/oauth2.js"></script>
 		<script src='scripts/auth.js'></script>
+		<script src="scripts/settings.js"></script>
 		<script src="scripts/options.js"></script>
 	</head>
 
-	<body>
+	<body style="padding:20px">
 		<form class="form-horizontal">
 			<legend>계정정보</legend>
 			<div class="control-group">
@@ -31,5 +32,30 @@
 		    </div>
 		  </div>
 		</form>
+
+		<form class="form-horizontal" id='settings'>
+			<legend>알림설정</legend>
+			<div class="control-group">
+				<label class="control-label">알림사용</label>
+				<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox" id='notUseNoti' name='notUseNoti'>사용하지 않음
+				</label>
+				</div>
+			</div>
+
+			<div class="control-group">
+			    <label class="control-label">자동 닫힘</label>
+			    <div class="controls">
+			    	<input class='span1' type="number" id="closeNotiSec" name="closeNotiSec"> 초 후에 알림을 자동으로 닫습니다.
+			    </div>
+		  	</div>		  	
+		  	<div class="control-group">
+		  		<div class="controls">
+			    	<input type="button" class="btn btn-primary" id='save' value='저장'></input>
+			    </div>
+		  	</div>		  	
+		</form>
+
 	</body>
 </html>

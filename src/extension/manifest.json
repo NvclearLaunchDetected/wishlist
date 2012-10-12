@@ -12,6 +12,7 @@
 			,"scripts/urlparser.js"
 			,"scripts/auth.js"
 			,"scripts/lifetime.js"
+			,"scripts/settings.js"
 			,"scripts/eventhandler.js"
 		],
 		"persistent": false
@@ -51,8 +52,9 @@
 	    		"libs/jquery.1.8.1.min.js"
 	    		,"scripts/urlparser.js"
 	    		,"scripts/markets.js"
-	    		,"scripts/pagescraper.js"
 	    		,"scripts/addToWishlist.js"
+	    		,"scripts/pagescraper.js"
+	    		
 	    	]
 	    }
 	],

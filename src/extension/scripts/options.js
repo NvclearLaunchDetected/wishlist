@@ -6,6 +6,17 @@ function restore(){
 		$('#inputEmail').val(authInfo.email);
 		$('#inputName').val(authInfo.name);		
 	})
+
+	Settings.required(function(settings){
+		$('#closeNotiSec').val(settings.closeNotiSec);
+		if(settings.notUseNoti)	$('#notUseNoti').attr('checked','checked');
+	});
+}
+
+
+function save(cb){
+	var settings = {settings: $('#settings').serializeJSON()};
+	chrome.storage.local.set(settings, cb(settings));
 }
 
 $(document).ready(function(){
@@ -17,5 +28,16 @@ $(document).ready(function(){
 		auth.clear();
 		window.location = 'https://accounts.google.com/Logout?hl=ko&continue=http://www.google.co.kr/?wlo=true';
 	});
+
+	$('#save').click(function(){
+		save(function(saved){
+			if(saved.settings.notUseNoti){
+				alert('옵션을 저장했습니다.');
+				return;
+			}
+
+			chrome.extension.sendMessage(null, { msg: 'popNotification' , title: '옵션', body: '옵션을 저장했습니다.'});
+		})
+	})
 })
 
