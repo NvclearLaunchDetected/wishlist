@@ -35,6 +35,9 @@
 	    	"run_at": "document_start"
 	    },
 	    {
+	    	"exclude_matches": [
+	    		"*://promotion.gmarket.co.kr/*"
+	    	],
 	    	"matches": [
 	    		"*://*.auction.co.kr/*"
 	    		,"*://*.gmarket.co.kr/*"

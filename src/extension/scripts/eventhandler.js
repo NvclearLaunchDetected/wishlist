@@ -16,14 +16,14 @@ function setAddMode(tabId){
 		popup: 'awpopup.html'
 	});
 
-	popNotification();
+	popNotification('관심상품 추가', '이 상품을 관심상품으로 추가할 수 있습니다.');
 }
 
-function popNotification(){
+function popNotification(title, body){
 	var notification = webkitNotifications.createNotification(
 	  'img/myfav_i19.png',  // icon url - can be relative
-	  '관심상품 추가',  // notification title
-	  '이 상품은 관심상품으로 추가할 수 있삼.'  // notification body text
+	  title,  // notification title
+	  body  // notification body text
 	);
 	
 	// Then show the notification.
@@ -57,6 +57,11 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 		})
 
 		return true;
+	}
+
+	if ('popNotification' == info.msg){
+		popNotification(info.title, info.body);
+		cb();
 	}
 
 	if ('isExist' == info.msg){
