@@ -24,6 +24,11 @@ PageScraper.prototype.getPrice = function() {
       var dc_price_elm = $('#dc_price');
       if(dc_price_elm && dc_price_elm.length){
         var dc_price = dc_price_elm.text();
+        var commentIncluded = dc_price.match(/<!--\s*.*\s*.*-->\s*(\d*)/);
+        if(commentIncluded && commentIncluded.length > 1){
+          dc_price = commentIncluded[1];
+        }
+        
         dc_price = dc_price.replace(',','');
         dc_price = dc_price.replace('원','');
         return dc_price;
