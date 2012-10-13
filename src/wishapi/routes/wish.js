@@ -103,7 +103,7 @@ exports.getWishList = function(req, res){
             }
         };
 
-        var select = "market title price market_item_id comments url imageurl reg_date";
+        var select = "market title price market_item_id comments url imageurl brand keywords model reg_date";
 
         Item.find(query, select, range, itemFindCallback);
       }
@@ -151,7 +151,7 @@ exports.addItem = function(req, res) {
       }
 
       var info = req.body;
-      //console.log(info);
+      console.log(info);
       var item = new Item({
         market : info.market,
         title : info.title,
@@ -160,6 +160,9 @@ exports.addItem = function(req, res) {
         comments : info.comments,
         url : info.url,
         imageurl : info.imageurl,
+        brand : info.brand,
+        keywords : info.keywords,
+        model : info.model,
         user_id : user._id
       });
 

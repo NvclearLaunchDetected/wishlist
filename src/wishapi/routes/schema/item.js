@@ -9,5 +9,8 @@ exports.schema = mongoose.Schema({
   url : String,                                   // 상품 VIP url
   imageurl : String,                              // 상품 image url
   user_id : mongoose.Schema.Types.ObjectId,       // 사용자 ID
+  brand : String,                                 // 브랜드
+  keywords : String,                              // 검색어
+  model : String,                                 // 모델
   reg_date : { type: Date, default: Date.now }    // 생성일
 });
