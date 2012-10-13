@@ -9,6 +9,9 @@ PageScraper.prototype.getGenericItemData = function(){
   itemData.title = this.getTitle();
   itemData.price = this.getPrice();
   itemData.imageArray = this.getGenericImageData();
+  itemData.brand = this.getBrand();
+  itemData.model = this.getModel();
+  itemData.keywords = this.getKeyword();
   return itemData;
 };
 
@@ -39,6 +42,49 @@ PageScraper.prototype.getPrice = function() {
 
     return 0;
 };
+
+PageScraper.prototype.getBrand = function(){
+  var info = urlparser.parse(window.location.href);
+  if(info.market == 'auction'){
+    var brandElm = $('div[id*=Brand]');
+    if(brandElm && brandElm.length > 0){
+      return brandElm.text()
+    }
+  }
+
+  if(info.market == 'gmarket'){
+    var brandElm = $('div[id*=Maker]');
+    if(brandElm && brandElm.length > 0){
+      return brandElm.text()
+    }
+  }
+
+  return null;
+}
+
+PageScraper.prototype.getModel = function(){
+  var info = urlparser.parse(window.location.href);
+  if(info.market == 'auction'){
+    var catalogElm = $('#hdivCatalog h2');
+    if(catalogElm && catalogElm.length > 0){
+      return catalogElm.text();
+    }
+  }
+
+  return null;
+}
+
+PageScraper.prototype.getKeyword = function(){
+  var info = urlparser.parse(window.location.href);
+  if(info.market == 'gmarket' || info.market == 'auction'){
+    var keywordElm = $('input[id*=keyword]');
+    if(keywordElm && keywordElm.length > 0){
+      return keywordElm.val();
+    }
+  }
+
+  return null;
+}
 
 PageScraper.prototype.sortImage = function(a, b){
 	return (b.height*b.width) - (a.height*a.width);
@@ -136,11 +182,11 @@ PageScraper.prototype.getTitle = function() {
 function getProductInfo(){
   var scraper = new PageScraper();
   var marketInfo = urlparser.parse(window.location.href) || {} ;
-  return { title: scraper.getTitle(), 
-    price: scraper.getPrice(), 
-    imageList: scraper.getGenericImageData(),
-    market: Markets.getCode(marketInfo.market),
-    market_item_id: marketInfo.itemno,
-    url: window.location.href
-  };
+
+  var itemData = scraper.getGenericItemData();
+  itemData.market = Markets.getCode(marketInfo.market);
+  itemData.market_item_id = marketInfo.itemno;
+  itemData.url = window.location.href;
+
+  return itemData;
 }

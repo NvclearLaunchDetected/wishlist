@@ -1,9 +1,8 @@
 {
-	//"update_url":"",
-	"name": "wishlist",
-	"version": "0.2",
+	"name": "iWish",
+	"version": "0.3",
 	"manifest_version": 2,
-	"description": "wishlist",
+	"description": "모든 상품을 담을 수 있는 wishlist",
 	"options_page": "options.html",
 	"background": {
 		"scripts": [
@@ -18,13 +17,11 @@
 		"persistent": false
 	},
 	"browser_action": {
-		//"default_icon": "img/shopping-cart-full.ico",
 		"default_icon": "img/myfav_i19.png",
 		"default_title": "wishlist",
 		"default_popup": "wvpopup.html"
 	},
 	"content_scripts": [
-			//content script for google oauth2
 			{
 				"matches": ["http://www.google.com/robots.txt*"],
 				"js": ["oauth2/oauth2_inject.js"],
@@ -79,6 +76,4 @@
 	"web_accessible_resources": [
 		"img/myfav_i19.png"
 	]
-
-	//,"default_locale" : "en"
 }

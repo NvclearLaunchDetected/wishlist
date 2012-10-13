@@ -44,7 +44,7 @@ function saveInputCache(){
 $(document).ready(function(){
 	chrome.extension.sendMessage(null, {msg: 'getProductInfo'}, function(info){
 		if(!info) return;
-		//console.log(info);
+		console.log(info);
 
 		scrapInfo = info;
 
@@ -72,10 +72,10 @@ $(document).ready(function(){
 				if(inputCache.imgNo != undefined){
 					selectedImageIndex = inputCache.imgNo;
 
-					if(scrapInfo.imageList && scrapInfo.imageList.length) {
-						if(scrapInfo.imageList.length <= selectedImageIndex)selectedImageIndex = 0;
-						$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
-						$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
+					if(scrapInfo.imageArray && scrapInfo.imageArray.length) {
+						if(scrapInfo.imageArray.length <= selectedImageIndex)selectedImageIndex = 0;
+						$('#selectedImage').attr('src', scrapInfo.imageArray[selectedImageIndex].src);
+						$('#inputImage').val(scrapInfo.imageArray[selectedImageIndex].src);
 						$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
 					}
 				}
@@ -88,10 +88,10 @@ $(document).ready(function(){
 			}
 		});
 
-		if(scrapInfo.imageList && scrapInfo.imageList.length) {
-			$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
-			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
-			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
+		if(scrapInfo.imageArray && scrapInfo.imageArray.length) {
+			$('#selectedImage').attr('src', scrapInfo.imageArray[selectedImageIndex].src);
+			$('#inputImage').val(scrapInfo.imageArray[selectedImageIndex].src);
+			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageArray.length);
 		}
 	});
 
@@ -99,20 +99,20 @@ $(document).ready(function(){
 	$('#prevImage').click(function(){
 		if(selectedImageIndex > 0) selectedImageIndex--;
 
-		if(scrapInfo.imageList && scrapInfo.imageList.length) {
-			$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
-			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
-			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
+		if(scrapInfo.imageArray && scrapInfo.imageArray.length) {
+			$('#selectedImage').attr('src', scrapInfo.imageArray[selectedImageIndex].src);
+			$('#inputImage').val(scrapInfo.imageArray[selectedImageIndex].src);
+			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageArray.length);
 		}
 	})
 
 	$('#nextImage').click(function(){
-		if(selectedImageIndex < scrapInfo.imageList.length) selectedImageIndex++;
+		if(selectedImageIndex < scrapInfo.imageArray.length) selectedImageIndex++;
 
-		if(scrapInfo.imageList && scrapInfo.imageList.length) {
-			$('#selectedImage').attr('src', scrapInfo.imageList[selectedImageIndex].src);
-			$('#inputImage').val(scrapInfo.imageList[selectedImageIndex].src);
-			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageList.length);
+		if(scrapInfo.imageArray && scrapInfo.imageArray.length) {
+			$('#selectedImage').attr('src', scrapInfo.imageArray[selectedImageIndex].src);
+			$('#inputImage').val(scrapInfo.imageArray[selectedImageIndex].src);
+			$('#selectedImageNum').text(selectedImageIndex+1 + ' / ' + scrapInfo.imageArray.length);
 		}
 	});
 
@@ -152,7 +152,11 @@ $(document).ready(function(){
 		form_data.market = scrapInfo.market;
 		form_data.market_item_id = scrapInfo.market_item_id;
 		form_data.url = scrapInfo.url;
-		console.log('scarpinfo: ')
+		if(scrapInfo.model) form_data.model = scrapInfo.model;
+		if(scrapInfo.brand) form_data.brand = scrapInfo.brand;
+		if(scrapInfo.keywords) form_data.keywords = scrapInfo.keywords;
+		
+		console.log('scrapInfo: ')
 		console.log(scrapInfo);
 		$('#addToWishlist').button('loading');
 		addToWishlist(form_data, function(res){

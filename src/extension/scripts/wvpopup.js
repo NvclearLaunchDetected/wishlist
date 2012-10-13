@@ -89,16 +89,8 @@ var _ux = {
 			var eo = $(e.currentTarget);
 			var o = _mx.pv.data.items[eo.attr("idx")]
 
-			_mx.loadCatalog( o.market, o.market_item_id, function(data) {
-				var m = data.match(/cid:(\d*)/);
-
-				if (m)
-					chrome.tabs.create({ url: "http://pcp.about.co.kr/ProductInfo.aspx?catalogIDs=" + m[1] + "&Tab=tab2" });
-			})
-
-			//chrome.tabs.create({ url: "http://pcp.about.co.kr/ProductInfo.aspx?catalogIDs=" + eo.attr("tid")+ "&Tab=tab2" });
-			
-			//chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(_mx.pv.data.items[eo.attr("idx")].title)});
+			var searchKeyword = _cx.pickSearchKeyword(o);
+			chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(searchKeyword.replace(/\[|\]/g,''))});
 		});
 
 		$(".action-detail").hover(function(e) {
@@ -133,6 +125,12 @@ var _cx = {
 		_mx.loadCatalog(item.mkt, item.no, function(data) {
 			_ux.renderCatalog(item.eid, data);
 		})
+	},
+	pickSearchKeyword: function(item) {
+		if(item.model) return item.model;
+		if(item.keywords) return item.keywords;
+		if(item.brand) return item.brand;
+		return item.title;
 	}
 };
 
