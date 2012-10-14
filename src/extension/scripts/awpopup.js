@@ -14,7 +14,7 @@ function setDefaultMode(){
 }
 
 function popNotification(body){
-	chrome.extension.sendMessage(null, {msg: 'popNotification', title: '관심상품 추가', body: body})
+	chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* 추가', body: body})
 }
 
 function priceFormat(n) {
@@ -184,7 +184,7 @@ $(document).ready(function(){
 			else{
 				$('#addToWishlist').button('complete');
 				setDefaultMode();
-				popNotification('[' + Markets.getMarket(form_data.market) +'] ' + form_data.market_item_id + ' 이(가) 관심상품으로 추가되었습니다.');
+				popNotification('[' + Markets.getMarket(form_data.market) +'] ' + form_data.market_item_id + ' 이(가) iWish* 목록에 추가되었습니다.');
 				chrome.storage.local.remove("inputCache");
 				chrome.extension.sendMessage(null, {msg: 'forceReloadList'});
 				window.close();

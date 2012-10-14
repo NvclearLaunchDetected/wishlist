@@ -111,6 +111,7 @@ var _ux = {
 	},
 	removeOne: function(line) {
 		$("#line_" + line).remove();
+		chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* 삭제', body: "선택하신 상품이 목록에서 삭제되었습니다."})
 	},
 	renderCatalog: function(tid, data) {
 		// render ... items
