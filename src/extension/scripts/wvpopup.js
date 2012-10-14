@@ -1,3 +1,12 @@
+function priceFormat(n) {
+	var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
+	n += '';                          // 숫자를 문자열로 변환
+
+	while (reg.test(n))
+		n = n.replace(reg, '$1' + ',' + '$2');
+	return n;
+}
+
 var auth = new Auth();
 var _mx = {
 	pv: {},
@@ -58,24 +67,21 @@ var _ux = {
 		console.log(JSON.stringify(d));
 
 		$("#wvlist").html('');
+		var rowTemplate = $('#rowTemplate');
 
-		var html = "";
 		for (var i = 0; i < d.items.length; i++) {
 			var o = d.items[i];
+			var row = rowTemplate.clone();
 
-			var h = "<tr id='line_" + o._id + "'>"
-			+ "<td>" + Markets.getMarket(o.market) + "</td>"
-			//+ "<td><span class='label label-info'><i class='icon-picture icon-white'></i></span></td>"
-			+ "<td width='60'><img src='" + o.imageurl + "' width='60' height='60'></td>"
-			+ "<td><div class='action-detail' tid='" + o._id + "' data-placement='top' data-content='" + o.comments + "'>" + o.title + "</div></td>"
-			+ "<td><span>" + o.price + "</span></td>"
-			+ "<td style='vertical-align:middle'><span class='action-pcs' idx='" + i + "'><a class='btn btn-small' rel='tooltip' title='가격비교'><i class='icon-eye-open'></i></a></span></td>"
-			+ "<td style='vertical-align:middle'><span class='action-remove' tid='" + o._id + "'><a class='btn btn-small btn-danger' rel='tooltip' title='삭제'><i class='icon-trash'></i></a></span></td></tr>";
-
-			html += h;
+			row.attr('id', 'line_'+o._id);
+			row.find('.market').attr('src', Markets.getLogoUrl(o.market));
+			row.find('.image').attr('src', o.imageurl);
+			row.find('.action-detail').attr('tid', o._id).attr('data-content', o.comments).text(o.title).attr('vip', o.url);
+			row.find('.price').text(priceFormat(o.price)); 
+			row.find('.action-pcs').attr('idx', i);
+			row.find('.action-remove').attr('tid', o._id);
+			$("#wvlist").append(row);
 		}
-
-		$("#wvlist").append(html);
 
 		$(".action-remove").click(function(e) {
 			_cx.remove($(e.currentTarget).attr("tid"));
@@ -83,7 +89,8 @@ var _ux = {
 
 		$(".action-detail").click(function(e) {
 			var eo = $(e.currentTarget);
-			_cx.catalog({ eid: eo.attr("tid"), mkt: eo.attr("mkt"), no: eo.attr("mid") });
+			var vipUrl = eo.attr('vip');
+			chrome.tabs.create({url: vipUrl});
 		});
 
 		$(".action-pcs").click(function(e) {

@@ -1,5 +1,5 @@
 function URLParser(){
-	var prodreg = /^https*:\/\/[\w]+\.([\w]+)\.[\w]+\.*[\w]*\/*.*(?:\?|&)(?:itemno|goodscode|prdno|item_cd|goods_no|i_code)=([\w]+).*/i
+	var prodreg = /^https*:\/\/[\w]+\.([\w]+)\.[\w]+\.*[\w]*\/*.*(?:\?|&)(?:itemno|goodscode|sc\.prdno|prdno|item_cd|goods_no|i_code)=([\w]+).*/i
 	
 	this.parse = function(url){
 		var captures = prodreg.exec(url);
