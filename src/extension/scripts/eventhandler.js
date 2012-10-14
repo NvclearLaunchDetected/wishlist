@@ -16,7 +16,7 @@ function setAddMode(tabId){
 		popup: 'awpopup.html'
 	});
 
-	popNotification('관심상품 추가', '이 상품을 관심상품으로 추가할 수 있습니다.');
+	popNotification('iWish* 추가', '이 상품을 iWish* 목록에 추가할 수 있습니다.');
 }
 
 function popNotification(title, body){
