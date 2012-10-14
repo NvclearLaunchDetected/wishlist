@@ -41,6 +41,23 @@ function saveInputCache(){
 	console.log(inputCache);
 }
 
+
+function addToWishlist(data, cb){
+	var auth = new Auth();
+	$.ajax({
+		type: 'POST',
+		url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+		data: data,
+			contentType: 'application/x-www-form-urlencoded',
+		headers: {
+			'GX-AUTH': auth.getGX()
+		}
+	}).done(cb).error(function(error){
+		cb({err:{msg: 'unknown error!'}});
+	})
+}
+
+
 $(document).ready(function(){
 	chrome.extension.sendMessage(null, {msg: 'getProductInfo'}, function(info){
 		if(!info) return;
@@ -175,19 +192,4 @@ $(document).ready(function(){
 		})
 	})
 });
-
-function addToWishlist(data, cb){
-	var auth = new Auth();
-	$.ajax({
-		type: 'POST',
-		url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
-		data: data,
-			contentType: 'application/x-www-form-urlencoded',
-		headers: {
-			'GX-AUTH': auth.getGX()
-		}
-	}).done(cb).error(function(error){
-		cb({err:{msg: 'unknown error!'}});
-	})
-}
 

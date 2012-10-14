@@ -14,13 +14,14 @@ var _mx = {
 		_mx.pv.gx = auth.getGX();
 	},
 	load: function(cb) {
+		console.log('calling on load')
 		chrome.storage.local.get("wish", function(items) {
 			if (items && items.wish && 0 < items.wish.items.length) {
 				console.log("data loaded from local storage");
 				cb(items.wish);
 			} else {
 				chrome.extension.sendMessage(null, {msg: 'forceReloadList'}, function(res) {
-					console.log("data loaded from remote svc");
+					console.log("data loaded from remote svc");	
 					cb(res);
 				});
 			}
@@ -125,7 +126,10 @@ var _cx = {
 				console.log("failed : try to delete item (" + tid + ")");
 			} else {
 				console.log("item has been deleted (" + tid + ")");
-				_ux.removeOne(tid);
+				chrome.storage.local.remove('wish', function(){
+					//remove wishlist cache.
+					_ux.removeOne(tid);	
+				});
 			}
 		});
 	},
@@ -137,7 +141,7 @@ var _cx = {
 	pickSearchKeyword: function(item) {
 		if(item.model) return item.model;
 		if(item.keywords) return item.keywords;
-		if(item.brand) return item.brand;
+		//if(item.) return item.brand; 브랜드 검색은 별 의미가 없음.
 		return item.title;
 	}
 };
@@ -147,8 +151,8 @@ $(document).ready(function() {
 		_mx.init();
 		_mx.load(function(res) {
 			if (res.err) return;
-				_mx.pv.data = res;
-				_ux.render(res);
+			_mx.pv.data = res;
+			_ux.render(res);
 		});
 	});
 });

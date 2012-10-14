@@ -26,7 +26,10 @@ $(document).ready(function(){
 	//event handlers
 	$('#relogin').click(function(){
 		auth.clear();
-		window.location = 'https://accounts.google.com/Logout?hl=ko&continue=http://www.google.co.kr/?wlo=true';
+		chrome.storage.local.remove('wish', function(){
+			//remove wishlist cache.
+			window.location = 'https://accounts.google.com/Logout?hl=ko&continue=http://www.google.co.kr/?wlo=true';	
+		});
 	});
 
 	$('#save').click(function(){
