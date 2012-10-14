@@ -10,6 +10,17 @@ var Markets = {
 		'lotteimall': 7
 	},
 
+	logoUrls: [
+		'img/empty.jpeg',
+		'img/auction.jpeg',
+		'img/gmarket.gif',
+		'img/11st.png',
+		'img/interpark.gif',
+		'img/cjmall.gif',
+		'img/lotte.com.gif',
+		'img/lotteimall.gif'
+	],
+
 	getCode: function(market){
 		if(!market)  return this.codes['unknown'];
 
@@ -21,5 +32,9 @@ var Markets = {
 	 		if(code == this.codes[m]) return m;
 	 	}		
 	 	return 'unknown';
+	},
+
+	getLogoUrl: function(code){
+		return this.logoUrls[code];
 	}
 }
