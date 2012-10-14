@@ -27,7 +27,7 @@ function priceFormat(n) {
 }
 
 function convertPriceToint(val){
-	return parseInt(val.replace(',',''),10);
+	return parseInt(val.replace(/,/g,''),10);
 }
 
 function saveInputCache(){
