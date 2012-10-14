@@ -91,7 +91,7 @@ var _ux = {
 			var o = _mx.pv.data.items[eo.attr("idx")]
 
 			var searchKeyword = _cx.pickSearchKeyword(o);
-			chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(searchKeyword.replace(/\[|\]/g,''))});
+			chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(searchKeyword.replace(/\[|\]/g,' '))});
 		});
 
 		$(".action-detail").hover(function(e) {
