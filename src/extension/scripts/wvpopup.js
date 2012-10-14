@@ -26,7 +26,7 @@ var _mx = {
 			}
 		})
 		.done(function(res) {
-			_mx.loadEx(function() {
+			_mx.load(function() {
 				cb({});
 			});
 		})
@@ -68,8 +68,9 @@ var _ux = {
 			//+ "<td><span class='label label-info'><i class='icon-picture icon-white'></i></span></td>"
 			+ "<td width='60'><img src='" + o.imageurl + "' width='60' height='60'></td>"
 			+ "<td><div class='action-detail' tid='" + o._id + "' data-placement='top' data-content='" + o.comments + "'>" + o.title + "</div></td>"
-			+ "<td><span>" + o.price + "</span><br><span class='label label-info action-pcs' idx='" + i + "'>가격비교</span></td>"
-			+ "<td><span class='label label-warning action-remove' tid='" + o._id + "'><i class='icon-trash icon-white'></i></span></td></tr>";
+			+ "<td><span>" + o.price + "</span></td>"
+			+ "<td style='vertical-align:middle'><span class='action-pcs' idx='" + i + "'><a class='btn btn-small' rel='tooltip' title='가격비교'><i class='icon-eye-open'></i></a></span></td>"
+			+ "<td style='vertical-align:middle'><span class='action-remove' tid='" + o._id + "'><a class='btn btn-small btn-danger' rel='tooltip' title='삭제'><i class='icon-trash'></i></a></span></td></tr>";
 
 			html += h;
 		}
