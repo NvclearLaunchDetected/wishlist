@@ -92,13 +92,13 @@ OAuth2.prototype.updateLocalStorage = function() {
  *
  * @param {Function} callback Method to call when the user finished auth.
  */
-OAuth2.prototype.openAuthorizationCodePopup = function(callback) {
+OAuth2.prototype.openAuthorizationCodePopup = function(callback, force_approve) {
   // Store a reference to the callback so that the newly opened window can call
   // it later.
   window['oauth-callback'] = callback;
 
   // Create a new tab with the OAuth 2.0 prompt
-  chrome.tabs.create({url: this.adapter.authorizationCodeURL(this.getConfig())},
+  chrome.tabs.create({url: this.adapter.authorizationCodeURL(this.getConfig(force_approve))},
   function(tab) {
     // 1. user grants permission for the application to access the OAuth 2.0
     // endpoint
@@ -121,6 +121,7 @@ OAuth2.prototype.openAuthorizationCodePopup = function(callback) {
  *                            access token, refresh token and expiry time
  */
 OAuth2.prototype.getAccessAndRefreshTokens = function(authorizationCode, callback) {
+  console.log('calling getAccessAndRefreshTokens.')
   var that = this;
   // Make an XHR to get the token
   var xhr = new XMLHttpRequest();
@@ -170,7 +171,6 @@ OAuth2.prototype.refreshAccessToken = function(refreshToken, callback) {
   xhr.onreadystatechange = function(event) {
     if (xhr.readyState == 4) {
       if(xhr.status == 200) {
-        console.log(xhr.responseText);
         // Parse response with JSON
         var obj = JSON.parse(xhr.responseText);
         // Callback with the tokens
@@ -202,7 +202,7 @@ OAuth2.prototype.finishAuth = function() {
     var views = chrome.extension.getViews();
     for (var i = 0, view; view = views[i]; i++) {
       if (view['oauth-callback']) {
-        view['oauth-callback'](error);
+        view['oauth-callback'](true);
         // TODO: Decide whether it's worth it to scope the callback or not.
         // Currently, every provider will share the same callback address but
         // that's not such a big deal assuming that they check to see whether
@@ -319,12 +319,13 @@ OAuth2.prototype.setSource = function(source) {
  *
  * @returns {Object} Contains clientId, clientSecret and apiScope.
  */
-OAuth2.prototype.getConfig = function() {
+OAuth2.prototype.getConfig = function(force_approve) {
   var data = this.get();
   return {
     clientId: data.clientId,
     clientSecret: data.clientSecret,
-    apiScope: data.apiScope
+    apiScope: data.apiScope,
+    force_approve: force_approve
   };
 };
 
@@ -407,14 +408,14 @@ OAuth2.lookupAdapterName = function(url) {
  * @param {Function} callback Tries to callback when auth is successful
  *                            Note: does not callback if grant popup required
  */
-OAuth2.prototype.authorize = function(callback) {
+OAuth2.prototype.authorize = function(callback, force_approve) {
   var that = this;
   OAuth2.loadAdapter(that.adapterName, function() {
     that.adapter = OAuth2.adapters[that.adapterName];
     var data = that.get();
     if (!data.accessToken) {
       // There's no access token yet. Start the authorizationCode flow
-      that.openAuthorizationCodePopup(callback);
+      that.openAuthorizationCodePopup(callback, force_approve);
     } else if (that.isAccessTokenExpired()) {
       // There's an existing access token but it's expired
       if (data.refreshToken) {
@@ -431,7 +432,7 @@ OAuth2.prototype.authorize = function(callback) {
         });
       } else {
         // No refresh token... just do the popup thing again
-        that.openAuthorizationCodePopup(callback);
+        that.openAuthorizationCodePopup(callback, force_approve);
       }
     } else {
       // We have an access token, and it's not expired yet
