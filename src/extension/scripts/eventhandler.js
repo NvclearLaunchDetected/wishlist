@@ -120,11 +120,11 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 		.done(function(res) {
 			console.log(">> DATA : " + JSON.stringify(res));
 
-			if (undefined === res.err && res.t && 0 < res.t) {
-				chrome.storage.local.set({ "wish": res }, function() {
-					cb(res);
-				})
-			}
+			if (res.err) return;
+
+			chrome.storage.local.set({ "wish": res }, function() {
+				cb(res);
+			})
 		})
 		.error(function(error) {
 			console.log(">> ERROR : " + JSON.stringify(error));

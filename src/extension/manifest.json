@@ -1,6 +1,6 @@
 {
 	"name": "iWish",
-	"version": "0.3",
+	"version": "0.3.2",
 	"manifest_version": 2,
 	"description": "모든 상품을 담을 수 있는 wishlist",
 	"options_page": "options.html",
