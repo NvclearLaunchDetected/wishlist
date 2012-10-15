@@ -2,8 +2,8 @@ var querystring = require('querystring'),
     mongoose = require('mongoose'),
     schema = require('./schema'),
     db = mongoose.createConnection('localhost', 'wish'),
-    err_code = require('./err_code');
-
+    err_code = require('./err_code'),
+    AboutOAuth2 = require("./oauth2/about.js").aoa2;
 
 var Item = db.model('Item', schema.item),
     User = db.model('User', schema.user);
@@ -117,6 +117,9 @@ exports.getWishList = function(req, res){
 };
 
 exports.addItem = function(req, res) {
+  console.log("AccessToken : "+AboutOAuth2.getAccessToken());
+  console.log("isAccessTokenExpired : "+AboutOAuth2.isAccessTokenExpired());
+  
   //token �로 user_id 조회
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
