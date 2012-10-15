@@ -1,6 +1,6 @@
 {
 	"name": "iWish",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"manifest_version": 2,
 	"description": "모든 상품을 담을 수 있는 wishlist",
 	"options_page": "options.html",
@@ -18,7 +18,7 @@
 	},
 	"browser_action": {
 		"default_icon": "img/myfav_i19.png",
-		"default_title": "wishlist",
+		"default_title": "iWish",
 		"default_popup": "wvpopup.html"
 	},
 	"content_scripts": [
@@ -63,7 +63,7 @@
 		,"notifications"
 		,"https://accounts.google.com/o/oauth2/token"
 		,"https://www.googleapis.com/"
-		,"*://wishapi-auth.cloudfoundry.com/*"
+		,"*://iwish.cloudfoundry.com/*"
 		,"*://*.auction.co.kr/*"
 		,"*://*.gmarket.co.kr/*"
 		,"*://*.about.co.kr/*"

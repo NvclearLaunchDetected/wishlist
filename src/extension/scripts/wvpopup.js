@@ -30,7 +30,7 @@ var _mx = {
 	removeOne: function(tid, cb) {
 		$.ajax({
 			type: 'DELETE',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist/' + tid,
+			url: 'http://iwish.cloudfoundry.com/wishlist/' + tid,
 			headers: {
 				'GX-AUTH': _mx.pv.gx
 			}

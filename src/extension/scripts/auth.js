@@ -47,7 +47,7 @@ Auth.prototype.required = function(cb){
 		console.log('set new auth token.')
 		$.ajax({
 			type: 'post',
-			url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
+			url: 'http://iwish.cloudfoundry.com/user/auth',
 			data: {
 				token: token,
 				name: info.name,
