@@ -10,4 +10,5 @@ chrome.runtime.onInstalled.addListener(function(){
 
 chrome.runtime.onSuspend.addListener(function(){
 	chrome.storage.local.clear();
+	auth.clear();
 })
