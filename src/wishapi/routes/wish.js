@@ -9,13 +9,13 @@ var Item = db.model('Item', schema.item),
     User = db.model('User', schema.user);
 
 exports.getWishList = function(req, res){
-  //token 으로 user_id 조회
+  //token �로 user_id 조회
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
     res.json({
       err : {
         code : err_code.CAN_NOT_GET_AUTH_INFO,
-        msg : '사용자 인증 정보가 누락 되었습니다.'
+        msg : '�용�증 �보가 �락 �었�니'
       }
     });
     return;
@@ -36,7 +36,7 @@ exports.getWishList = function(req, res){
         res.json({
           err : {
             code : err_code.CAN_NOT_FIND_USER,
-            msg : '사용자 인증 정보가 일치 하지 않습니다.'
+            msg : '�용�증 �보가 �치 �� �습�다.'
           }
         });
         return;
@@ -103,7 +103,7 @@ exports.getWishList = function(req, res){
             }
         };
 
-        var select = "market title price market_item_id comments url imageurl reg_date";
+        var select = "market title price market_item_id comments url imageurl brand keywords model reg_date";
 
         Item.find(query, select, range, itemFindCallback);
       }
@@ -117,13 +117,13 @@ exports.getWishList = function(req, res){
 };
 
 exports.addItem = function(req, res) {
-  //token 으로 user_id 조회
+  //token �로 user_id 조회
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
     res.json({
       err : {
         code : err_code.CAN_NOT_GET_AUTH_INFO,
-        msg : '사용자 인증 정보가 누락 되었습니다.'
+        msg : '�용�증 �보가 �락 �었�니'
       }
     });
     return;
@@ -144,7 +144,7 @@ exports.addItem = function(req, res) {
         res.json({
           err : {
             code : err_code.CAN_NOT_FIND_USER,
-            msg : '사용자 인증 정보가 일치 하지 않습니다.'
+            msg : '�용�증 �보가 �치 �� �습�다.'
           }
         });
         return;
@@ -152,7 +152,6 @@ exports.addItem = function(req, res) {
 
       var info = req.body;
       var price = parseInt(info.price, 10);
-      //console.log(info);
       var item = new Item({
         market : info.market,
         title : info.title,
@@ -161,6 +160,9 @@ exports.addItem = function(req, res) {
         comments : info.comments,
         url : info.url,
         imageurl : info.imageurl,
+        brand : info.brand,
+        keywords : info.keywords,
+        model : info.model,
         user_id : user._id
       });
 
@@ -187,13 +189,13 @@ exports.addItem = function(req, res) {
 };
 
 exports.removeItem = function(req, res) {
-  //token 으로 user_id 조회
+  //token �로 user_id 조회
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
     res.json({
       err : {
         code : err_code.CAN_NOT_GET_AUTH_INFO,
-        msg : '사용자 인증 정보가 누락 되었습니다.'
+        msg : '�용�증 �보가 �락 �었�니'
       }
     });
     return;
@@ -214,7 +216,7 @@ exports.removeItem = function(req, res) {
         res.json({
           err : {
             code : err_code.CAN_NOT_FIND_USER,
-            msg : '사용자 인증 정보가 일치 하지 않습니다.'
+            msg : '�용�증 �보가 �치 �� �습�다.'
           }
         });
         return;
