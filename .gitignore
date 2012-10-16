@@ -28,3 +28,6 @@ temp/
 
 # ignore cloudfoundry vmc configfile
 manifest.yml
+
+# ignore runtime config
+runtime.json

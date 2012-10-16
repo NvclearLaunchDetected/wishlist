@@ -38,6 +38,7 @@ app.get('/wishlist', wish.getWishList);
 app.get('/wishlist/:page_no', wish.getWishList);
 app.post('/wishlist', wish.addItem);
 app.del('/wishlist/:item_id', wish.removeItem);
+app.post('/wishlist/:item_id/share',wish.shareItem);
 //app.get('/catalog/list', catalog.list);
 
 /**
