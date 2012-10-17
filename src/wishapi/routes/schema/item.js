@@ -12,5 +12,6 @@ exports.schema = mongoose.Schema({
   brand : String,                                 // 브랜드
   keywords : String,                              // 검색어
   model : String,                                 // 모델
+  catalog_id : String,                            // 카탈로그 ID
   reg_date : { type: Date, default: Date.now }    // 생성일
 });

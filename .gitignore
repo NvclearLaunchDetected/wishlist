@@ -28,3 +28,6 @@ temp/
 
 # ignore cloudfoundry vmc configfile
 manifest.yml
+
+# ignore catalog api
+src/wishapi/routes/catalog.js

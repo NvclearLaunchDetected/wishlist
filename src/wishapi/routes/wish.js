@@ -2,20 +2,20 @@ var querystring = require('querystring'),
     mongoose = require('mongoose'),
     schema = require('./schema'),
     db = mongoose.createConnection('localhost', 'wish'),
-    err_code = require('./err_code');
-
+    err_code = require('./err_code'),
+    catalog = require('./catalog.js');
 
 var Item = db.model('Item', schema.item),
     User = db.model('User', schema.user);
 
 exports.getWishList = function(req, res){
-  //token �로 user_id 조회
+  //user validation by token
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
     res.json({
       err : {
         code : err_code.CAN_NOT_GET_AUTH_INFO,
-        msg : '�용�증 �보가 �락 �었�니'
+        msg : '사용자 정보가 누락 되었습니다.'
       }
     });
     return;
@@ -36,7 +36,7 @@ exports.getWishList = function(req, res){
         res.json({
           err : {
             code : err_code.CAN_NOT_FIND_USER,
-            msg : '�용�증 �보가 �치 �� �습�다.'
+            msg : '사용자를 찾을 수 없습니다.'
           }
         });
         return;
@@ -47,7 +47,7 @@ exports.getWishList = function(req, res){
       var page_size = parseInt(req.query.ps, 10);
       var page_no = parseInt(req.params.page_no, 10);
 
-      // 조회 조건
+      // where query
       var query = {user_id:user._id};
 
       if (market != undefined)
@@ -70,7 +70,7 @@ exports.getWishList = function(req, res){
         });
       }
       else{
-        // range 조건
+        // range query
         var range = {sort:{reg_date:-1}};
 
         page_size = (page_size == undefined || page_size == 0 || isNaN(page_size))?10:page_size;
@@ -103,7 +103,7 @@ exports.getWishList = function(req, res){
             }
         };
 
-        var select = "market title price market_item_id comments url imageurl brand keywords model reg_date";
+        var select = "market title price market_item_id comments url imageurl brand keywords model catalog_id reg_date";
 
         Item.find(query, select, range, itemFindCallback);
       }
@@ -117,13 +117,13 @@ exports.getWishList = function(req, res){
 };
 
 exports.addItem = function(req, res) {
-  //token �로 user_id 조회
+  //user validation by token
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
     res.json({
       err : {
         code : err_code.CAN_NOT_GET_AUTH_INFO,
-        msg : '�용�증 �보가 �락 �었�니'
+        msg : '사용자 정보가 누락 되었습니다.'
       }
     });
     return;
@@ -144,44 +144,50 @@ exports.addItem = function(req, res) {
         res.json({
           err : {
             code : err_code.CAN_NOT_FIND_USER,
-            msg : '�용�증 �보가 �치 �� �습�다.'
+            msg : '사용자를 찾을 수 없습니다.'
           }
         });
         return;
       }
 
       var info = req.body;
-      var price = parseInt(info.price, 10);
-      var item = new Item({
-        market : info.market,
-        title : info.title,
-        price : isNaN(price)?0:price,
-        market_item_id : info.market_item_id,
-        comments : info.comments,
-        url : info.url,
-        imageurl : info.imageurl,
-        brand : info.brand,
-        keywords : info.keywords,
-        model : info.model,
-        user_id : user._id
-      });
 
-      var itemCallback = function(err){
-        if(err){
-          console.log(err);
-          res.json({
-            err : {
-              code : err_code.CAN_NOT_SAVE_ITEM,
-              msg : err.message
-            }
-          });
-        }
-        else{
-          res.json({});
-        }
+      var getCatalogCallback = function (catalogInfo){
+        var price = parseInt(info.price, 10);
+        var item = new Item({
+          market : info.market,
+          title : info.title,
+          price : isNaN(price)?0:price,
+          market_item_id : info.market_item_id,
+          comments : info.comments,
+          url : info.url,
+          imageurl : info.imageurl,
+          brand : info.brand,
+          keywords : info.keywords,
+          model : info.model,
+          catalog_id : (catalogInfo && catalogInfo.cid)?catalogInfo.cid:null,
+          user_id : user._id
+        });
+
+        var itemCallback = function(err){
+          if(err){
+            console.log(err);
+            res.json({
+              err : {
+                code : err_code.CAN_NOT_SAVE_ITEM,
+                msg : err.message
+              }
+            });
+          }
+          else{
+            res.json({});
+          }
+        };
+
+        item.save(itemCallback);
       };
 
-      item.save(itemCallback);
+      catalog.get(info.market, info.market_item_id, getCatalogCallback);
     }
   }
 
@@ -189,13 +195,13 @@ exports.addItem = function(req, res) {
 };
 
 exports.removeItem = function(req, res) {
-  //token �로 user_id 조회
+  //user validation by token
   var authInfo = querystring.parse(req.get('GX-AUTH'));
   if( authInfo == undefined || authInfo.ga == undefined || authInfo.token == undefined){
     res.json({
       err : {
         code : err_code.CAN_NOT_GET_AUTH_INFO,
-        msg : '�용�증 �보가 �락 �었�니'
+        msg : '사용자 정보가 누락 되었습니다.'
       }
     });
     return;
@@ -216,7 +222,7 @@ exports.removeItem = function(req, res) {
         res.json({
           err : {
             code : err_code.CAN_NOT_FIND_USER,
-            msg : '�용�증 �보가 �치 �� �습�다.'
+            msg : '사용자를 찾을 수 없습니다.'
           }
         });
         return;
