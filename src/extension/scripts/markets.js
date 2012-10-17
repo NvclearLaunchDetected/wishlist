@@ -11,7 +11,7 @@ var Markets = {
 		'interpark': 9,
 		'lotte': 10,
 		'dnshop': 12,
-		'shinsege': 13,
+		'shinsegae': 13,
 		'akmall': 14
 	},
 
