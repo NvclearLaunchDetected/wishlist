@@ -48,7 +48,7 @@ var _mx = {
 	loadCatalog: function(mkt, no, cb) {
 		$.ajax({
 			type: 'GET',
-			url: "http://devprism.about.co.kr/catalog.aspx?mall=" + mkt + "&no=" + no,
+			url: "aaa?mall=" + mkt + "&no=" + no,
 			dataType: "text"
 		})
 		.done(function(res) {
@@ -158,7 +158,7 @@ var _cx = {
 	pickSearchKeyword: function(item) {
 		if(item.model) return item.model;
 		if(item.keywords) return item.keywords;
-		//if(item.) return item.brand; 브랜드 검색은 별 의미가 없음.
+
 		return item.title;
 	}
 };
