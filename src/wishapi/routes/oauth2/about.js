@@ -1,24 +1,12 @@
-var oAuth2 = require('oauth2.js');
+var oAuth2 = require('./oauth2.js')
+   ,util = require('util')
+   ,querystring = require('querystring');
 
-var AboutOauth2 = function {
-	var instance =  null;
-	this.getInstance = function(){
-		if( this.instance == null){
-			return new AboutOauth2();
-		}
-		else{
-			return this.instance;
-		}
-	}
-
+var AboutOauth2 = function() {
 	var oa2 = new oAuth2.OAuth2("apiv2.about.co.kr", "/OAuth2/Authorize?", "/OAuth2/GetAccessToken");
 	var clientID = "iwish";
 	var clientSecret = "dkdldnltl!@#";
 	var redirectUri = "http://iwish.cloudfoundry.com/OAuth/About/Callback";
-
-	this.constructor = function(){
-		AuthorizationRequest();
-	}
 
 	var accessToken = null;
 	var accessTokenDate = null;
@@ -38,7 +26,7 @@ var AboutOauth2 = function {
 	  return (new Date().valueOf() - accessTokenDate) > expiresIn * 1000;
 	};
 
-	var AuthorizationRequest = function(){
+	this.AuthorizationRequest = function(){
 		var get_data = {
 			response_type : "code",
 			client_id : clientID,
@@ -47,14 +35,20 @@ var AboutOauth2 = function {
 			scope : "",
 			state : "IWISH"
 		}
-		oAuth2.AuthorizationRequest(get_data);
+		oa2.AuthorizationRequest(get_data, AuthorizationRequestCallback);
+	}
+
+	var AuthorizationRequestCallback = function(res){
+		var location = String(res.headers["location"]);
+		var data = querystring.parse(location.replace('http://iwish.cloudfoundry.com/OAuth/About/Callback?',''));
+		
+		//console.log("Auth Requst Callback : "+util.inspect(res));
+		console.log("Auth Requst Callback : "+util.inspect(data));
+		  
+		if( !data.error ) this.code = code;
 	}
 
 	var code = null;
-
-	this.setCode = function(code){
-		this.code = code;
-	}
 
 	this.AccessTokenRequest = function(){
 		var post_data = {
@@ -64,10 +58,10 @@ var AboutOauth2 = function {
 			client_id : clientID,
 			client_secret : clientSecret,
 		}
-		oAuth2.AccessTokenRequest(post_data, this.AccessTokenRequestCallback);
+		oa2.AccessTokenRequest(post_data, this.AccessTokenRequestCallback);
 	}
 
-	this.AccessTokenRequestCallback = function(res){
+	var AccessTokenRequestCallback = function(res){
 		console.log(res);
 		this.accessToken = res.AccessToken;
 		this.accessTokenDate = new Date().valueOf();
@@ -83,8 +77,19 @@ var AboutOauth2 = function {
 			client_id : clientID,
 			client_secret : clientSecret,
 		}
-		oAuth2.AccessTokenRequest(post_data, this.AccessTokenRequestCallback);
+		oa2.AccessTokenRequest(post_data, this.AccessTokenRequestCallback);
 	};
 };
+
+AboutOauth2.instance = null;
+
+AboutOauth2.getInstance = function(){
+	if( this.instance == null){
+		return new AboutOauth2();
+	}
+	else{
+		return this.instance;
+	}
+}
 
 exports.aoa2 = AboutOauth2.getInstance();

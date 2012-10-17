@@ -6,25 +6,23 @@ exports.OAuth2 = function(host, authRequst, tokenRequest){
 	var authRequst = authRequst;
 	var tokenRequest = tokenRequest;
 
-	var accessToken = null;
-	var resreshToken = null;
-	var expiresIn = 0;
-
-	this.AuthorizationRequest = function(get_data){
+	this.AuthorizationRequest = function(get_data, callback){
 		var options = {
 		   host: host,
 		   port: 80,
-		   path: authRequst + "?" + querystring.stringify(get_data),
-		   method: 'GET',
+		   path: authRequst + querystring.stringify(get_data),
+		   method: 'GET'/*,
 		   headers: {  
 		    'Content-Type': 'application/x-www-form-urlencoded',  
-		  }  
+		  }*/
 		};
+
+		console.log("AuthorizationRequest to : "+host+options.path);
 
 		var req = http.request(options, function(res) {
 		  res.setEncoding('utf8');  
-		  res.on('data', function (chunk) {  
-		    console.log(chunk);
+		  res.on('data', function (chunk) {
+		  	callback(res);
 		  }); 
 		});
 

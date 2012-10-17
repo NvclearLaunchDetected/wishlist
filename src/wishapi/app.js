@@ -8,8 +8,8 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , wish = require('./routes/wish')
-  , admin = require('./routes/admin');
-
+  , admin = require('./routes/admin')
+  , AboutOAuth2 = require("./routes/oauth2/about.js").aoa2;
 var app = express();
 
 app.configure(function(){
@@ -52,4 +52,8 @@ app.get('/admin/wishlist', admin.getWishList);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
+
+  // get about api token
+  AboutOAuth2.AuthorizationRequest();
 });
+
