@@ -1,3 +1,4 @@
+var auth = chrome.extension.getBackgroundPage().auth;
 var url_parser = new URLParser();
 var scrapInfo = {};
 var selectedImageIndex = 0;
@@ -43,7 +44,6 @@ function saveInputCache(){
 
 
 function addToWishlist(data, cb){
-	var auth = new Auth();
 	$.ajax({
 		type: 'POST',
 		url: 'http://iwish.cloudfoundry.com/wishlist',

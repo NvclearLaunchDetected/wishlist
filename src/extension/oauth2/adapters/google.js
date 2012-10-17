@@ -1,6 +1,6 @@
 OAuth2.adapter('google', {
   authorizationCodeURL: function(config) {
-    return ('https://accounts.google.com/o/oauth2/auth?' +
+    var acurl = ('https://accounts.google.com/o/oauth2/auth?' +
       'client_id={{CLIENT_ID}}&' +
       'redirect_uri={{REDIRECT_URI}}&' +
       'scope={{API_SCOPE}}&' +
@@ -9,6 +9,9 @@ OAuth2.adapter('google', {
         .replace('{{CLIENT_ID}}', config.clientId)
         .replace('{{REDIRECT_URI}}', this.redirectURL(config))
         .replace('{{API_SCOPE}}', config.apiScope);
+
+    if(config.force_approve) acurl += '&approval_prompt=force';
+    return acurl;
   },
 
   redirectURL: function(config) {

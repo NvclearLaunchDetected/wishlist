@@ -1,6 +1,6 @@
 {
 	"name": "iWish",
-	"version": "0.3.3",
+	"version": "0.3.7",
 	"manifest_version": 2,
 	"description": "모든 상품을 담을 수 있는 wishlist",
 	"options_page": "options.html",
@@ -21,7 +21,7 @@
 	},
 	"browser_action": {
 		"default_icon": "img/myfav_i19.png",
-		"default_title": "wishlist",
+		"default_title": "iWish",
 		"default_popup": "wvpopup.html"
 	},
 	"content_scripts": [
@@ -36,9 +36,9 @@
 			"run_at": "document_start"
 		},
 		{
-			"exclude_matches": [
-				"*://promotion.gmarket.co.kr/*"
-			],
+    		"exclude_matches": [
+    			"*://promotion.gmarket.co.kr/*"
+    		],
 			"matches": [
 				"*://*.auction.co.kr/*"
 				,"*://*.gmarket.co.kr/*"
@@ -64,7 +64,6 @@
 	],
 	"permissions": [
 		"tabs"
-		,"storage"
 		,"background"
 		,"storage"
 		,"notifications"

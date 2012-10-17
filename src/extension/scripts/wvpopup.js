@@ -1,3 +1,5 @@
+var auth = chrome.extension.getBackgroundPage().auth;
+
 function priceFormat(n) {
 	var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
 	n += '';                          // 숫자를 문자열로 변환
@@ -7,7 +9,6 @@ function priceFormat(n) {
 	return n;
 }
 
-var auth = new Auth();
 var _mx = {
 	pv: {},
 	init: function() {

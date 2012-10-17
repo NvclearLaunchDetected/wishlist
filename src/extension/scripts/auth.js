@@ -23,14 +23,9 @@ Auth.prototype.getGX = function(){
 	return 'ga=' + authInfo.email + '&token=' + authInfo.accessToken;
 }
 
-Auth.prototype.required = function(cb){
+Auth.prototype.required = function(cb,force_approve){
 	console.log('auth required')
-	if(google.getAccessToken() && !google.isAccessTokenExpired()){
-		console.log('has valid token.');
-		cb();
-		return;
-	}
-	
+		
 	function getGoogleUserinfo(token, cb) {
 		console.log('calling userinfo ' +token);
 		$.ajax({
@@ -47,7 +42,7 @@ Auth.prototype.required = function(cb){
 		console.log('set new auth token.')
 		$.ajax({
 			type: 'post',
-			url: 'http://wishapi-auth.cloudfoundry.com/user/auth',
+			url: 'http://iwish.cloudfoundry.com/user/auth',
 			data: {
 				token: token,
 				name: info.name,
@@ -64,7 +59,13 @@ Auth.prototype.required = function(cb){
 		cb({token: google.getAccessToken(), email: google.get('email'), name: google.get('name')});
 	}
 
-	google.authorize(function(){
+	google.authorize(function(reNew){
+		if(!reNew) {
+			cb();
+			return;
+		}
+
+		console.log('reNew is ' + reNew)
 	 	if(!google.getAccessToken()){
 	 		console.error("couldn't get the access token.");
 	 		cb({err: {msg: "couldn't get the access token."}});
@@ -90,5 +91,5 @@ Auth.prototype.required = function(cb){
 				saveUserInfo(info, cb);
 			})
 		});
-	});
+	}, force_approve);
 }

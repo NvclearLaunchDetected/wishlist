@@ -42,7 +42,6 @@ function popNotification(title, body){
 }
 
 function isExist(market_code, itemno, cb){
-	var auth = new Auth();
 	$.ajax({
 		type: 'GET',
 		url: 'http://iwish.cloudfoundry.com/wishlist?market=' + market_code + '&market_item_id=' + itemno,
@@ -114,17 +113,17 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 			type: 'GET',
 			url: 'http://iwish.cloudfoundry.com/wishlist',
 			headers: {
-			'GX-AUTH': new Auth().getGX()
+			'GX-AUTH': auth.getGX()
 			}
 		})
 		.done(function(res) {
 			console.log(">> DATA : " + JSON.stringify(res));
 
-			if (undefined === res.err && res.t && 0 < res.t) {
-				chrome.storage.local.set({ "wish": res }, function() {
-					cb(res);
-				})
-			}
+			if (res.err) return;
+
+			chrome.storage.local.set({ "wish": res }, function() {
+				cb(res);
+			})
 		})
 		.error(function(error) {
 			console.log(">> ERROR : " + JSON.stringify(error));
