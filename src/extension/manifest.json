@@ -2,7 +2,7 @@
 	"name": "iWish",
 	"version": "0.4.1",
 	"manifest_version": 2,
-	"description": "모든 상품을 담을 수 있는 wishlist",
+	"description": "iWish* 나만의 쇼핑 기술",
 	"options_page": "options.html",
 	"background": {
 		"scripts": [
@@ -33,6 +33,11 @@
 		{
 			"matches": ["http://www.google.co.kr/*"],
 			"js": ["scripts/auth_inject.js"],
+			"run_at": "document_start"
+		},
+		{
+			"matches": ["http://www.facebook.com/robots.txt*"],
+			"js": ["oauth2/oauth2_inject.js"],
 			"run_at": "document_start"
 		},
 		{

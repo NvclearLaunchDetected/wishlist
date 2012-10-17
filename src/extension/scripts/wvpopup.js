@@ -83,6 +83,7 @@ var _ux = {
 			row.find('.action-detail').attr('tid', o._id).attr('data-content', o.comments).text(o.title).attr('vip', o.url);
 			row.find('.price').text(priceFormat(o.price)); 
 			row.find('.action-pcs').attr('idx', i);
+			row.find('.action-share').attr('idx', i);
 			row.find('.action-remove').attr('tid', o._id);
 			row.find('.twitter-share-button').attr('data-url', o.url).attr('data-text','iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.')
 			$("#wvlist").append(row);
@@ -100,11 +101,10 @@ var _ux = {
 
 		$(".action-share").click(function(e) {
 			var eo = $(e.currentTarget);
-			var o = _mx.pv.data.items[eo.attr("idx")]
-			var fb = _cx.share.fb || new FBAuth();
+			var o = _mx.pv.data.items[eo.attr("idx")];
 
-			fb.required(function() {
-				// share with facebook
+			_cx.shareWithFacebook(o, function(oid) {
+				chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* Facebook에 글쓰기', body: "선택하신 상품이 Facebook을 통해 공유되었습니다."})
 			});
 		});
 
@@ -177,17 +177,35 @@ var _cx = {
 		if(item.keywords) return item.keywords;
 
 		return item.title;
+	},
+	shareWithFacebook: function(o, cb) {
+		var fb = _cx.share.fb || (_cx.share.fb = new FBAuth());
+
+		fb.required(function() {
+			var post = {
+				picture: o.imageurl,
+				link: o.url,
+				name: o.title,
+				caption: "iWish* 나만의 쇼핑 기술",
+				description: "Google Chrome의 확장 프로그램인 'iWish'로 쇼핑 지능을 높이세요.",
+				message: o.comments,
+				icon: Markets.getLogoUrl(o.market)
+			};
+
+			fb.publish(post, function(result) {
+				console.log(result);
+				cb(((result.err) ? "" : result.id));
+			});
+		});
 	}
 };
 
 $(document).ready(function() {
-	auth.required(function(){
-		_cx.init();
-		_mx.init();
-		_mx.load(function(res) {
-			if (res.err) return;
-			_mx.pv.data = res;
-			_ux.render(res);
-		});
+	_cx.init();
+	_mx.init();
+	_mx.load(function(res) {
+		if (res.err) return;
+		_mx.pv.data = res;
+		_ux.render(res);
 	});
 });
