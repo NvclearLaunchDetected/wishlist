@@ -45,7 +45,7 @@ function isExist(market_code, itemno, cb){
 	var auth = new Auth();
 	$.ajax({
 		type: 'GET',
-		url: 'http://wishapi-auth.cloudfoundry.com/wishlist?market=' + market_code + '&market_item_id=' + itemno,
+		url: 'http://iwish.cloudfoundry.com/wishlist?market=' + market_code + '&market_item_id=' + itemno,
 		headers: {
 			'GX-AUTH': auth.getGX()
 		}
@@ -112,7 +112,7 @@ chrome.extension.onMessage.addListener(function(info, sender, cb){
 	if ('forceReloadList' == info.msg) {
 		$.ajax({
 			type: 'GET',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+			url: 'http://iwish.cloudfoundry.com/wishlist',
 			headers: {
 			'GX-AUTH': new Auth().getGX()
 			}

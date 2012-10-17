@@ -30,13 +30,13 @@ var _mx = {
 	removeOne: function(tid, cb) {
 		$.ajax({
 			type: 'DELETE',
-			url: 'http://wishapi-auth.cloudfoundry.com/wishlist/' + tid,
+			url: 'http://iwish.cloudfoundry.com/wishlist/' + tid,
 			headers: {
 				'GX-AUTH': _mx.pv.gx
 			}
 		})
 		.done(function(res) {
-			_mx.load(function() {
+			chrome.storage.local.remove('wish', function() {
 				cb({});
 			});
 		})
@@ -98,8 +98,18 @@ var _ux = {
 			var eo = $(e.currentTarget);
 			var o = _mx.pv.data.items[eo.attr("idx")]
 
-			var searchKeyword = _cx.pickSearchKeyword(o);
-			chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(searchKeyword.replace(/\[|\]/g,' '))});
+			var landingUrl = ""
+
+			if (o.catalog_id) {
+				landingUrl = "http://pcp.about.co.kr/ProductInfo.aspx?Tab=tab2&catalogIDs=" + o.catalog_id;
+			} else {
+				var searchKeyword = _cx.pickSearchKeyword(o);
+
+				landingUrl = "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword="
+					+ encodeURI(searchKeyword.replace(/\[|\]/g,' '));
+			}
+			
+			chrome.tabs.create({ url: landingUrl});
 		});
 
 		$(".action-detail").hover(function(e) {
@@ -120,6 +130,13 @@ var _ux = {
 };
 
 var _cx = {
+	init: function() {
+		$("#u-refresh").click(function() {
+			chrome.extension.sendMessage(null, {msg: 'forceReloadList'}, function(res) {
+				_ux.render(res);
+			});
+		});
+	},
 	remove: function(tid) {
 		console.log("try to delete :" + tid);
 		_mx.removeOne(tid, function(res) {
@@ -128,7 +145,6 @@ var _cx = {
 			} else {
 				console.log("item has been deleted (" + tid + ")");
 				chrome.storage.local.remove('wish', function(){
-					//remove wishlist cache.
 					_ux.removeOne(tid);	
 				});
 			}
@@ -149,6 +165,7 @@ var _cx = {
 
 $(document).ready(function() {
 	auth.required(function(){
+		_cx.init();
 		_mx.init();
 		_mx.load(function(res) {
 			if (res.err) return;

@@ -46,7 +46,7 @@ function addToWishlist(data, cb){
 	var auth = new Auth();
 	$.ajax({
 		type: 'POST',
-		url: 'http://wishapi-auth.cloudfoundry.com/wishlist',
+		url: 'http://iwish.cloudfoundry.com/wishlist',
 		data: data,
 			contentType: 'application/x-www-form-urlencoded',
 		headers: {
