@@ -94,6 +94,16 @@ var _ux = {
 			chrome.tabs.create({url: vipUrl});
 		});
 
+		$(".action-share").click(function(e) {
+			var eo = $(e.currentTarget);
+			var o = _mx.pv.data.items[eo.attr("idx")]
+			var fb = _cx.share.fb || new FBAuth();
+
+			fb.required(function() {
+				// share with facebook
+			});
+		});
+
 		$(".action-pcs").click(function(e) {
 			var eo = $(e.currentTarget);
 			var o = _mx.pv.data.items[eo.attr("idx")]
@@ -130,6 +140,7 @@ var _ux = {
 };
 
 var _cx = {
+	share: {},
 	init: function() {
 		$("#u-refresh").click(function() {
 			chrome.extension.sendMessage(null, {msg: 'forceReloadList'}, function(res) {
