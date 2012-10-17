@@ -1,5 +1,7 @@
 var auth = chrome.extension.getBackgroundPage().auth;
 
+
+
 function priceFormat(n) {
 	var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
 	n += '';                          // 숫자를 문자열로 변환
@@ -82,6 +84,7 @@ var _ux = {
 			row.find('.price').text(priceFormat(o.price)); 
 			row.find('.action-pcs').attr('idx', i);
 			row.find('.action-remove').attr('tid', o._id);
+			row.find('.twitter-share-button').attr('data-url', o.url).attr('data-text','iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.')
 			$("#wvlist").append(row);
 		}
 
@@ -129,6 +132,8 @@ var _ux = {
 		function(e) {
 			$(e.currentTarget).popover("hide");
 		})
+
+		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=chrome.extension.getURL('scripts/share/twitter.js');fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 	},
 	removeOne: function(line) {
 		$("#line_" + line).remove();
