@@ -1,5 +1,7 @@
 var auth = chrome.extension.getBackgroundPage().auth;
 
+
+
 function priceFormat(n) {
 	var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
 	n += '';                          // 숫자를 문자열로 변환
@@ -37,7 +39,7 @@ var _mx = {
 			}
 		})
 		.done(function(res) {
-			_mx.load(function() {
+			chrome.storage.local.remove('wish', function() {
 				cb({});
 			});
 		})
@@ -49,7 +51,7 @@ var _mx = {
 	loadCatalog: function(mkt, no, cb) {
 		$.ajax({
 			type: 'GET',
-			url: "http://devprism.about.co.kr/catalog.aspx?mall=" + mkt + "&no=" + no,
+			url: "aaa?mall=" + mkt + "&no=" + no,
 			dataType: "text"
 		})
 		.done(function(res) {
@@ -81,7 +83,9 @@ var _ux = {
 			row.find('.action-detail').attr('tid', o._id).attr('data-content', o.comments).text(o.title).attr('vip', o.url);
 			row.find('.price').text(priceFormat(o.price)); 
 			row.find('.action-pcs').attr('idx', i);
+			row.find('.action-share').attr('idx', i);
 			row.find('.action-remove').attr('tid', o._id);
+			row.find('.twitter-share-button').attr('data-url', o.url).attr('data-text','iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.')
 			$("#wvlist").append(row);
 		}
 
@@ -95,12 +99,31 @@ var _ux = {
 			chrome.tabs.create({url: vipUrl});
 		});
 
+		$(".action-share").click(function(e) {
+			var eo = $(e.currentTarget);
+			var o = _mx.pv.data.items[eo.attr("idx")];
+
+			_cx.shareWithFacebook(o, function(oid) {
+				chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* Facebook에 글쓰기', body: "선택하신 상품이 Facebook을 통해 공유되었습니다."})
+			});
+		});
+
 		$(".action-pcs").click(function(e) {
 			var eo = $(e.currentTarget);
 			var o = _mx.pv.data.items[eo.attr("idx")]
 
-			var searchKeyword = _cx.pickSearchKeyword(o);
-			chrome.tabs.create({ url: "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword=" + encodeURI(searchKeyword.replace(/\[|\]/g,' '))});
+			var landingUrl = ""
+
+			if (o.catalog_id) {
+				landingUrl = "http://pcp.about.co.kr/ProductInfo.aspx?Tab=tab2&catalogIDs=" + o.catalog_id;
+			} else {
+				var searchKeyword = _cx.pickSearchKeyword(o);
+
+				landingUrl = "http://finding.about.co.kr/Search/Search.aspx?istop=y&Keyword="
+					+ encodeURI(searchKeyword.replace(/\[|\]/g,' '));
+			}
+			
+			chrome.tabs.create({ url: landingUrl});
 		});
 
 		$(".action-detail").hover(function(e) {
@@ -109,6 +132,8 @@ var _ux = {
 		function(e) {
 			$(e.currentTarget).popover("hide");
 		})
+
+		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=chrome.extension.getURL('scripts/share/twitter.js');fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 	},
 	removeOne: function(line) {
 		$("#line_" + line).remove();
@@ -121,6 +146,14 @@ var _ux = {
 };
 
 var _cx = {
+	share: {},
+	init: function() {
+		$("#u-refresh").click(function() {
+			chrome.extension.sendMessage(null, {msg: 'forceReloadList'}, function(res) {
+				_ux.render(res);
+			});
+		});
+	},
 	remove: function(tid) {
 		console.log("try to delete :" + tid);
 		_mx.removeOne(tid, function(res) {
@@ -129,7 +162,6 @@ var _cx = {
 			} else {
 				console.log("item has been deleted (" + tid + ")");
 				chrome.storage.local.remove('wish', function(){
-					//remove wishlist cache.
 					_ux.removeOne(tid);	
 				});
 			}
@@ -143,18 +175,37 @@ var _cx = {
 	pickSearchKeyword: function(item) {
 		if(item.model) return item.model;
 		if(item.keywords) return item.keywords;
-		//if(item.) return item.brand; 브랜드 검색은 별 의미가 없음.
+
 		return item.title;
+	},
+	shareWithFacebook: function(o, cb) {
+		var fb = _cx.share.fb || (_cx.share.fb = new FBAuth());
+
+		fb.required(function() {
+			var post = {
+				picture: o.imageurl,
+				link: o.url,
+				name: o.title,
+				caption: "iWish* 나만의 쇼핑 기술",
+				description: "Google Chrome의 확장 프로그램인 'iWish'로 쇼핑 지능을 높이세요.",
+				message: o.comments,
+				icon: Markets.getLogoUrl(o.market)
+			};
+
+			fb.publish(post, function(result) {
+				console.log(result);
+				cb(((result.err) ? "" : result.id));
+			});
+		});
 	}
 };
 
 $(document).ready(function() {
-	auth.required(function(){
-		_mx.init();
-		_mx.load(function(res) {
-			if (res.err) return;
-			_mx.pv.data = res;
-			_ux.render(res);
-		});
+	_cx.init();
+	_mx.init();
+	_mx.load(function(res) {
+		if (res.err) return;
+		_mx.pv.data = res;
+		_ux.render(res);
 	});
 });

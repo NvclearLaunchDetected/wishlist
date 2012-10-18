@@ -31,9 +31,9 @@ function popNotification(title, body){
 		
 		// Then show the notification.
 		notification.show();
-		notification.onclose = function(){
-			console.log('closing! notification');
-		}
+		// notification.onclose = function(){
+		// 	console.log('closing! notification');
+		// }
 
 		setTimeout(function(){
 		 	notification.close();

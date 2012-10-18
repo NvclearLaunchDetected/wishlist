@@ -1,8 +1,8 @@
 {
 	"name": "iWish",
-	"version": "0.3.7",
+	"version": "0.4.1",
 	"manifest_version": 2,
-	"description": "모든 상품을 담을 수 있는 wishlist",
+	"description": "iWish* 나만의 쇼핑 기술",
 	"options_page": "options.html",
 	"background": {
 		"scripts": [
@@ -15,6 +15,9 @@
 			,"scripts/eventhandler.js"
 		],
 		"persistent": false
+	},
+	"icons": {
+		"128": "img/iwish_icon_128x128.png"
 	},
 	"browser_action": {
 		"default_icon": "img/myfav_i19.png",
@@ -33,6 +36,11 @@
 			"run_at": "document_start"
 		},
 		{
+			"matches": ["http://www.facebook.com/robots.txt*"],
+			"js": ["oauth2/oauth2_inject.js"],
+			"run_at": "document_start"
+		},
+		{
     		"exclude_matches": [
     			"*://promotion.gmarket.co.kr/*"
     		],
@@ -44,13 +52,18 @@
 				,"*://*.cjmall.com/*"
 				,"*://*.lotte.com/*"
 				,"*://*.lotteimall.com/*"
+				,"*://*.hyundaihmall.com/*"
+				,"*://*.shinsegae.com/*"
+				,"*://*.gsshop.com/*"
+				,"*://*.dnshop.com/*"
+				,"*://*.akmall.com/*"
 			],
 			"js": [
 				"libs/jquery.1.8.1.min.js"
 				,"scripts/urlparser.js"
 				,"scripts/markets.js"
 				,"scripts/addToWishlist.js"
-    			,"scripts/pagescraper.js"
+				,"scripts/pagescraper.js"
 			]
 		}
 	],
@@ -59,17 +72,8 @@
 		,"background"
 		,"storage"
 		,"notifications"
-		,"https://accounts.google.com/o/oauth2/token"
-		,"https://www.googleapis.com/"
-		,"*://iwish.cloudfoundry.com/*"
-		,"*://*.auction.co.kr/*"
-		,"*://*.gmarket.co.kr/*"
-		,"*://*.about.co.kr/*"
-		,"*://*.interpark.com/*"
-		,"*://*.11st.co.kr/*"
-		,"*://*.cjmall.com/*"
-		,"*://*.lotte.com/*"
-		,"*://*.lotteimall.com/*"
+		,"http://*/*"
+		,"https://*/*"
 	],
 	"web_accessible_resources": [
 		"img/myfav_i19.png"

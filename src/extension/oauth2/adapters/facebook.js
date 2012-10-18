@@ -11,6 +11,7 @@ OAuth2.adapter('facebook', {
 
   redirectURL: function(config) {
     return 'http://www.facebook.com/robots.txt';
+    //return 'http://iwish.cloudfoundry.com/robots.txt';
   },
 
   parseAuthorizationCode: function(url) {
