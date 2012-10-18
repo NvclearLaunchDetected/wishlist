@@ -127,6 +127,8 @@ var _ux = {
 					console.log("share with eMail");
 					break;
 			}
+
+			$("#u-share-modal").modal("hide");
 		});
 
 		$('.action-share-twitter').click(function(e) {
@@ -223,7 +225,7 @@ var _cx = {
 			var post = {
 				picture: o.imageurl,
 				link: o.url,
-				name: o.title,
+				name: "(" + Markets.getName(o.market) + ") " + o.title,
 				caption: "iWish* 나만의 쇼핑 기술",
 				description: o.comments,
 				message: msg,
