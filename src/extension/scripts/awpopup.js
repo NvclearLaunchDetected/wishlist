@@ -1,4 +1,4 @@
-var auth = chrome.extension.getBackgroundPage().auth;
+var auth = new Auth();
 var url_parser = new URLParser();
 var scrapInfo = {};
 var selectedImageIndex = 0;

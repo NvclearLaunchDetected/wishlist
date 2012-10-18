@@ -1,4 +1,5 @@
-var auth = chrome.extension.getBackgroundPage().auth;
+var auth = new Auth();
+
 
 
 
@@ -84,8 +85,8 @@ var _ux = {
 			row.find('.price').text(priceFormat(o.price)); 
 			row.find('.action-pcs').attr('idx', i);
 			row.find('.action-share').attr('idx', i);
-			row.find('.action-remove').attr('tid', o._id);
-			row.find('.twitter-share-button').attr('data-url', o.url).attr('data-text','iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.')
+			row.find('.action-remove').attr('tid', o._id);			
+			row.find('.action-share-twitter').attr('idx', i);
 			$("#wvlist").append(row);
 		}
 
@@ -107,6 +108,16 @@ var _ux = {
 				chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* Facebook에 글쓰기', body: "선택하신 상품이 Facebook을 통해 공유되었습니다."})
 			});
 		});
+
+		$('.action-share-twitter').click(function(e) {
+			var eo = $(e.currentTarget);
+			var o = _mx.pv.data.items[eo.attr("idx")];
+
+			var twitterUrl = 'https://twitter.com/share?text='+ 'iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.';
+			twitterUrl += '&url=' + encodeURIComponent(o.url);
+
+			window.open(twitterUrl,"","width=640, height=480");
+		})
 
 		$(".action-pcs").click(function(e) {
 			var eo = $(e.currentTarget);
