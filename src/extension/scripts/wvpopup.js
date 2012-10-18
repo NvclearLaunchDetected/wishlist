@@ -83,9 +83,10 @@ var _ux = {
 			row.find('.action-detail').attr('tid', o._id).attr('data-content', o.comments).text(o.title).attr('vip', o.url);
 			row.find('.price').text(priceFormat(o.price)); 
 			row.find('.action-pcs').attr('idx', i);
-			row.find('.action-share').attr('idx', i);
 			row.find('.action-remove').attr('tid', o._id);
 			row.find('.twitter-share-button').attr('data-url', o.url).attr('data-text','iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.')
+			row.find('.action-share').attr('idx', i);
+
 			$("#wvlist").append(row);
 		}
 
@@ -99,20 +100,39 @@ var _ux = {
 			chrome.tabs.create({url: vipUrl});
 		});
 
-		$(".action-share").click(function(e) {
-			var eo = $(e.currentTarget);
-			var o = _mx.pv.data.items[eo.attr("idx")];
 
-			_cx.shareWithFacebook(o, function(oid) {
-				chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* Facebook에 글쓰기', body: "선택하신 상품이 Facebook을 통해 공유되었습니다."})
-			});
+		$(".action-share").click(function(e) {
+			$("#u-share-submit").attr("idx", $(e.currentTarget).attr("idx"));
+			$("#u-share-modal").modal("show");
+		});
+
+		$("#u-share-submit").click(function(e) {
+			var o = _mx.pv.data.items[$(e.currentTarget).attr("idx")];
+			var a = $("#u-sns-select > button.active");
+
+			switch (a.attr("i")) {
+				case "0" :
+					console.log("share with Facebook");
+					_cx.shareWithFacebook($("#u-sns-text").val(), o, function(oid) {
+						chrome.extension.sendMessage(null, {msg: 'popNotification', title: 'iWish* Facebook에 글쓰기', body: "선택하신 상품이 Facebook을 통해 공유되었습니다."})
+					});
+					break;
+				case "1" :
+					console.log("share with Twitter");
+					// open url
+					//https://twitter.com/intent/tweet?original_referer=&source=tweetbutton&text=iWish(https%3A%2F%2Fchrome.google.com%2Fwebstore%2Fdetail%2Fiwish%2Flilemgdkaeokndjakhipmfajhfkgkmad%3Futm_source%3Dchrome-ntp-icon)%EC%97%90%EC%84%9C%20%EA%B4%80%EC%8B%AC%EC%83%81%ED%92%88%EC%9C%BC%EB%A1%9C%20%EB%93%B1%EB%A1%9D%ED%95%9C%20%EC%83%81%ED%92%88%EC%9E%85%EB%8B%88%EB%8B%A4.&url=http%3A%2F%2Fmall.shinsegae.com%2Fitem%2Fitem.do%3Fmethod%3DviewItemDetail%26item_id%3D16888553%26ckwhere%3Dshoppingcom%26clickNo%3D173535%26clickDate%3D20121017%26cpcType%3D1%26ref%3Dabout_open
+					break;
+				case "2" :
+					console.log("share with eMail");
+					break;
+			}
 		});
 
 		$(".action-pcs").click(function(e) {
 			var eo = $(e.currentTarget);
 			var o = _mx.pv.data.items[eo.attr("idx")]
 
-			var landingUrl = ""
+			var landingUrl = "";
 
 			if (o.catalog_id) {
 				landingUrl = "http://pcp.about.co.kr/ProductInfo.aspx?Tab=tab2&catalogIDs=" + o.catalog_id;
@@ -178,7 +198,7 @@ var _cx = {
 
 		return item.title;
 	},
-	shareWithFacebook: function(o, cb) {
+	shareWithFacebook: function(msg, o, cb) {
 		var fb = _cx.share.fb || (_cx.share.fb = new FBAuth());
 
 		fb.required(function() {
@@ -187,8 +207,8 @@ var _cx = {
 				link: o.url,
 				name: o.title,
 				caption: "iWish* 나만의 쇼핑 기술",
-				description: "Google Chrome의 확장 프로그램인 'iWish'로 쇼핑 지능을 높이세요.",
-				message: o.comments,
+				description: o.comments,
+				message: msg,
 				icon: Markets.getLogoUrl(o.market)
 			};
 

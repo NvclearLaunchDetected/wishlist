@@ -56,7 +56,7 @@
 					<br>
 					<span class="action-remove"><a class="btn btn-mini btn-danger action-btn-m" rel="tooltip" title="삭제"><i class="icon-trash icon-white"></i></a></span>
 					<br>
-					<span class="action-share"><a class="btn btn-mini action-btn-m" rel="tooltip" title="FB"><i class="icon-share"></i></a></span>
+					<span class="action-share"><a class="btn btn-mini action-btn-m" href="#" role="btn" title="FB"><i class="icon-share"></i></a></span>
 					<br>
 					<span>
 						<a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-text="" data-lang="ko">트윗하기</a>
@@ -64,5 +64,23 @@
 				</td>
 			</tr>
 		</table>
+		<div id="u-share-modal" class="modal hide" role="dialog" aria-hidden="true" tabindex="-1">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    		<h4>공유하기</h4>
+			</div>
+			<div class="modal-body">
+				<div id="u-sns-select" class="btn-group" data-toggle="buttons-radio">
+					<button type="button" class="btn btn-mini" i="0">FB</button>
+					<button type="button" class="btn btn-mini" i="1">TW</button>
+					<button type="button" class="btn btn-mini" i="2">Mail</button>
+				</div>
+				<textarea id="u-sns-text" rows="3" style="width:300px"></textarea>
+			</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-small">Close</a>
+    		<a id="u-share-submit" href="#" class="btn btn-small btn-primary">Share</a>
+			</div>
+		</div>
 	</body>
 </html>
