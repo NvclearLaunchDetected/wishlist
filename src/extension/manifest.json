@@ -1,6 +1,6 @@
 {
 	"name": "iWish",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"manifest_version": 2,
 	"description": "iWish* 나만의 쇼핑 기술",
 	"options_page": "options.html",

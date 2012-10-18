@@ -1,4 +1,4 @@
-var auth = chrome.extension.getBackgroundPage().auth;
+var auth = new Auth();
 
 function restore(){
 	auth.required(function(){
