@@ -2,7 +2,9 @@ google = new OAuth2('google', {
 	client_id: '939394320283.apps.googleusercontent.com',
 	client_secret: 'SyozXTsqDKp9eUtfFFulc-uf',
 	api_scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
-});	
+});
+
+google.apikey = "AIzaSyCSYUw0GPsd8dnWcWV-xa34PRDJFfaIq-Q";
 
 function Auth(){
 	console.log('init auth');

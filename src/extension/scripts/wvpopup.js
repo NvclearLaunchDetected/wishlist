@@ -133,10 +133,17 @@ var _ux = {
 			var eo = $(e.currentTarget);
 			var o = _mx.pv.data.items[eo.attr("idx")];
 
-			var twitterUrl = 'https://twitter.com/share?text='+ 'iWish(https://chrome.google.com/webstore/detail/iwish/lilemgdkaeokndjakhipmfajhfkgkmad?utm_source=chrome-ntp-icon)에서 관심상품으로 등록한 상품입니다.';
-			twitterUrl += '&url=' + encodeURIComponent(o.url);
+			shortenUrl(o.url, google.apikey, function(res) {
+				console.log(JSON.stringify(res));
 
-			window.open(twitterUrl,"","width=640, height=480");
+				if (!res.err) {
+					var twitterUrl = 'https://twitter.com/share?text=' +
+						encodeURIComponent('* iWish - http://goo.gl/pjjIC * (' + Markets.getName(o.market) + ') ' + o.title + ' -> ') +
+						'&url=' + res.id;
+
+					window.open(twitterUrl,"","width=640, height=480");
+				}
+			});
 		})
 
 		$(".action-pcs").click(function(e) {

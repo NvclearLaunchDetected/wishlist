@@ -44,6 +44,26 @@ var Markets = {
 		'14': 'http://i.iabout.kr/w/mall/14/201206/01/634741657760282931.GIF'
 	},
 
+	names: [
+		{
+			'0': '',
+			'1': '옥션',
+			'2': 'G마켓',
+			'3': '11번가',
+			'4': 'GS샵',
+			'5': '현대i몰',
+			'6': 'CJ몰',
+			'7': '롯데i몰',
+			'8': '',
+			'9': '인터파크',
+			'10': '롯데닷컴',
+			'11': '',
+			'12': '디앤샵',
+			'13': '신세계몰',
+			'14': 'AK몰'
+		}
+	],
+
 	getCode: function(market){
 		if(!market)  return this.codes['unknown'];
 
@@ -59,5 +79,13 @@ var Markets = {
 
 	getLogoUrl: function(code){
 		return this.logoUrls2[code];
+	},
+
+	getName: function(code, langIdx) {
+		var lang = 0;
+
+		if (langIdx) lang = langIdx;
+
+		return this.names[lang][code];
 	}
 }
