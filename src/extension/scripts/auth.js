@@ -9,6 +9,9 @@ function Auth(){
 }
 
 Auth.prototype.clear = function(){
+	console.log('clearing auth info');
+	console.log('this : ' + this);
+	
 	google.clearAccessToken()
 	google.clear('email');
 	google.clear('name');
