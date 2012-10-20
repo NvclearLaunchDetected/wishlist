@@ -84,8 +84,7 @@ var _ux = {
 			row.find('.action-detail').attr('tid', o._id).attr('data-content', o.comments).text(o.title).attr('vip', o.url);
 			row.find('.price').text(priceFormat(o.price)); 
 			row.find('.action-pcs').attr('idx', i);
-			row.find('.action-remove').attr('tid', o._id);			
-			row.find('.action-share-twitter').attr('idx', i);
+			row.find('.action-remove').attr('tid', o._id);
 			row.find('.action-share').attr('idx', i);
 
 			$("#wvlist").append(row);
@@ -122,6 +121,17 @@ var _ux = {
 					console.log("share with Twitter");
 					// open url
 					//https://twitter.com/intent/tweet?original_referer=&source=tweetbutton&text=iWish(https%3A%2F%2Fchrome.google.com%2Fwebstore%2Fdetail%2Fiwish%2Flilemgdkaeokndjakhipmfajhfkgkmad%3Futm_source%3Dchrome-ntp-icon)%EC%97%90%EC%84%9C%20%EA%B4%80%EC%8B%AC%EC%83%81%ED%92%88%EC%9C%BC%EB%A1%9C%20%EB%93%B1%EB%A1%9D%ED%95%9C%20%EC%83%81%ED%92%88%EC%9E%85%EB%8B%88%EB%8B%A4.&url=http%3A%2F%2Fmall.shinsegae.com%2Fitem%2Fitem.do%3Fmethod%3DviewItemDetail%26item_id%3D16888553%26ckwhere%3Dshoppingcom%26clickNo%3D173535%26clickDate%3D20121017%26cpcType%3D1%26ref%3Dabout_open
+					shortenUrl(o.url, google.apikey, function(res) {
+						console.log(JSON.stringify(res));
+
+						if (!res.err) {
+							var twitterUrl = 'https://twitter.com/share?text=' +
+								encodeURIComponent($("#u-sns-text").val() + ' *iWish(http://goo.gl/pjjIC)* (' + Markets.getName(o.market) + ') ' + o.title + ' -> ') +
+								'&url=' + res.id;
+
+							window.open(twitterUrl,"","width=640, height=480");
+						}
+					});
 					break;
 				case "2" :
 					console.log("share with eMail");
@@ -130,23 +140,6 @@ var _ux = {
 
 			$("#u-share-modal").modal("hide");
 		});
-
-		$('.action-share-twitter').click(function(e) {
-			var eo = $(e.currentTarget);
-			var o = _mx.pv.data.items[eo.attr("idx")];
-
-			shortenUrl(o.url, google.apikey, function(res) {
-				console.log(JSON.stringify(res));
-
-				if (!res.err) {
-					var twitterUrl = 'https://twitter.com/share?text=' +
-						encodeURIComponent('* iWish - http://goo.gl/pjjIC * (' + Markets.getName(o.market) + ') ' + o.title + ' -> ') +
-						'&url=' + res.id;
-
-					window.open(twitterUrl,"","width=640, height=480");
-				}
-			});
-		})
 
 		$(".action-pcs").click(function(e) {
 			var eo = $(e.currentTarget);
